@@ -898,6 +898,121 @@
        .from('.rail a', { opacity: 0, x: 14, duration: .6, stagger: .06 }, .6);
 })();
 </script>
+<link rel="stylesheet" href="assets/geovalor-data-story.css?v=3">
+<script src="assets/geovalor-data-story.js?v=3"></script>
+<script>
+/* Autonomous cinematic layer: keeps the geological world alive between scrolls. */
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  function el(name,attrs){
+    var node=document.createElementNS(NS,name);
+    Object.keys(attrs||{}).forEach(function(key){node.setAttribute(key,attrs[key]);});
+    return node;
+  }
+  function bootAlive(){
+    var stage=document.querySelector('.stage');
+    var frame=document.querySelector('#frame');
+    var overlay=frame&&frame.querySelector('svg.overlay');
+    var gs=window.gsap;
+    if(!stage||!frame||!overlay||!gs)return setTimeout(bootAlive,160);
+    if(stage.dataset.gvAlive)return;
+    stage.dataset.gvAlive='1';
+    var heroImage=frame.querySelector('img');
+    if(heroImage){
+      var bundledFallback=heroImage.src;
+      heroImage.onerror=function(){heroImage.onerror=null;heroImage.removeAttribute('srcset');heroImage.src=bundledFallback;};
+      heroImage.decoding='async';
+      heroImage.fetchPriority='high';
+      heroImage.sizes='100vw';
+      heroImage.srcset='assets/geovalor-subsolo-clean-v3-1920.jpg?v=2 1920w, assets/geovalor-subsolo-clean-v3-4k.jpg?v=2 3840w, assets/geovalor-subsolo-clean-v3-8k.jpg?v=2 7680w';
+      heroImage.src='assets/geovalor-subsolo-clean-v3-4k.jpg?v=2';
+    }
 
+    var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var css=document.createElement('style');
+    css.textContent='#frame img{image-rendering:auto;filter:contrast(1.055) saturate(1.07) brightness(1.015);backface-visibility:hidden;transform-origin:50% 48%;will-change:transform,filter}#frame svg.overlay{shape-rendering:geometricPrecision}.gv-machine-light{position:absolute;z-index:3;width:3.2%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,226,169,.95) 0 4%,rgba(209,132,78,.38) 11%,rgba(209,132,78,.08) 34%,transparent 68%);filter:blur(.25px);opacity:.7}.gv-machine-light:after{content:"";position:absolute;inset:43% -100%;background:linear-gradient(90deg,transparent,rgba(255,228,178,.55),transparent);height:1px}.gv-light-vehicle{left:51.8%;top:42.2%}.gv-light-rig{left:60.9%;top:36.7%}.gv-light-pump{left:82.4%;top:36.8%}.gv-alive-particle{vector-effect:non-scaling-stroke;transform-box:fill-box;transform-origin:center}.gv-gold-rise{fill:#f0c776;filter:drop-shadow(0 0 3px #d9a94c)}.gv-diamond-rise{fill:#f4f0e8;stroke:#bfe7ef;stroke-width:.7;filter:drop-shadow(0 0 4px rgba(207,239,247,.8))}.gv-copper-rise{fill:#d1844e;filter:drop-shadow(0 0 4px rgba(209,132,78,.75))}@media(max-width:820px){#frame img{filter:contrast(1.045) saturate(1.05)}.gv-machine-light{width:5%}}@media(prefers-reduced-motion:reduce){.gv-machine-light{display:none}}';
+    document.head.appendChild(css);
+    var mechanicalCss=document.createElement('style');
+    mechanicalCss.textContent='.gv-dust-puff{position:absolute;z-index:2;left:50.7%;top:43.2%;width:.52%;aspect-ratio:1;border-radius:50%;pointer-events:none;background:rgba(190,159,127,.38);filter:blur(2px);mix-blend-mode:screen}.gv-pump-beam{position:absolute;z-index:4;left:79.7%;top:35.2%;width:4.8%;height:2px;transform-origin:88% 50%;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(224,155,96,.72),rgba(255,224,172,.65));box-shadow:0 0 8px rgba(209,132,78,.45)}@media(max-width:820px){.gv-dust-puff{width:1%}.gv-pump-beam{height:1px}}@media(prefers-reduced-motion:reduce){.gv-dust-puff,.gv-pump-beam{display:none}}';
+    document.head.appendChild(mechanicalCss);
+    var readabilityCss=document.createElement('style');
+    readabilityCss.textContent='.chapter{isolation:isolate}.chapter:before{content:"";position:absolute;z-index:-1;inset:-34px -74px -42px -46px;pointer-events:none;background:linear-gradient(90deg,rgba(9,11,10,.78) 0%,rgba(9,11,10,.52) 55%,transparent 100%);filter:blur(1px)}.chapter h2{color:#F4F0E8!important;text-shadow:0 3px 28px rgba(0,0,0,.96),0 1px 3px rgba(0,0,0,.9)}.chapter p{color:#E0E1DB!important;text-shadow:0 2px 14px rgba(0,0,0,.96)}.chapter .over{position:relative;text-shadow:0 1px 9px rgba(0,0,0,1)}@media(max-width:820px){.chapter:before{inset:-22px -34px -26px -22px;background:linear-gradient(90deg,rgba(9,11,10,.76),rgba(9,11,10,.38) 75%,transparent)}}';
+    document.head.appendChild(readabilityCss);
 
+    ['vehicle','rig','pump'].forEach(function(name){
+      var light=document.createElement('span');
+      light.className='gv-machine-light gv-light-'+name;
+      light.setAttribute('aria-hidden','true');
+      frame.appendChild(light);
+      if(!reduced)gs.to(light,{opacity:.28,scale:1.35,duration:name==='rig'?.72:1.05,repeat:-1,yoyo:true,ease:'sine.inOut',delay:name==='pump'?.3:0});
+    });
+
+    var pumpBeam=document.createElement('span');
+    pumpBeam.className='gv-pump-beam';
+    pumpBeam.setAttribute('aria-hidden','true');
+    frame.appendChild(pumpBeam);
+    var dust=[];
+    for(var d=0;d<9;d++){
+      var puff=document.createElement('span');
+      puff.className='gv-dust-puff';
+      puff.setAttribute('aria-hidden','true');
+      frame.appendChild(puff);
+      dust.push(puff);
+    }
+
+    var gold=document.getElementById('goldVeins');
+    var diamonds=document.getElementById('diamondIndicators');
+    var copper=document.getElementById('copperZones');
+    var vehicle=document.getElementById('surveyVehicle');
+    var rig=document.getElementById('drillRig');
+    var pump=document.getElementById('pumpjack');
+
+    function addMinerals(parent,kind,points,count){
+      if(!parent)return [];
+      var items=[];
+      for(var i=0;i<count;i++){
+        var point=points[i%points.length];
+        var x=point[0]+((i*17)%31)-15;
+        var y=point[1]+((i*29)%25)-12;
+        var node=kind==='diamond'
+          ?el('rect',{x:x-2.6,y:y-2.6,width:5.2,height:5.2,rx:.5,'class':'gv-alive-particle gv-diamond-rise',transform:'rotate(45 '+x+' '+y+')'})
+          :el('circle',{cx:x,cy:y,r:kind==='gold'?2.2:2.8,'class':'gv-alive-particle gv-'+kind+'-rise'});
+        parent.appendChild(node);items.push(node);
+      }
+      return items;
+    }
+
+    var goldBits=addMinerals(gold,'gold',[[650,815],[760,785],[1215,700],[1330,675]],20);
+    var diamondBits=addMinerals(diamonds,'diamond',[[1335,500],[1360,590],[1380,690],[1394,790]],18);
+    var copperBits=addMinerals(copper,'copper',[[1285,790],[1395,830]],12);
+
+    if(!reduced){
+      gs.to('#frame img',{scale:1.008,xPercent:.16,yPercent:-.09,duration:8.5,repeat:-1,yoyo:true,ease:'sine.inOut'});
+      gs.to(pumpBeam,{rotation:-13,duration:1.2,repeat:-1,yoyo:true,ease:'sine.inOut'});
+      dust.forEach(function(puff,i){
+        gs.fromTo(puff,{opacity:0,scale:.35,x:0,y:0},{opacity:.48,scale:2.5+(i%3)*.5,x:-28-(i%4)*10,y:-5-(i%3)*5,duration:1.7+(i%4)*.24,delay:i*.19,repeat:-1,ease:'power1.out',repeatDelay:.35});
+      });
+      if(vehicle){
+        var rings=vehicle.querySelectorAll('circle');
+        if(rings[1])gs.to(rings[1],{rotation:360,transformOrigin:'50% 50%',duration:12,repeat:-1,ease:'none'});
+        gs.to(vehicle,{x:5,y:-1,duration:2.4,repeat:-1,yoyo:true,ease:'sine.inOut'});
+      }
+      if(rig)gs.to(rig,{y:1.6,duration:.34,repeat:-1,yoyo:true,ease:'sine.inOut'});
+      if(pump){
+        gs.to(pump,{rotation:-1.15,transformOrigin:'50% 100%',duration:1.25,repeat:-1,yoyo:true,ease:'sine.inOut'});
+        gs.to(pump.querySelectorAll('path'),{strokeDasharray:'8 5',strokeDashoffset:-26,duration:1.8,repeat:-1,ease:'none'});
+      }
+      goldBits.forEach(function(node,i){gs.fromTo(node,{opacity:0,scale:.45,y:8},{opacity:.95,scale:1.15,y:-30-(i%4)*10,duration:2.3+(i%5)*.32,delay:(i%7)*.31,repeat:-1,ease:'power1.out',repeatDelay:.6+(i%3)*.4});});
+      diamondBits.forEach(function(node,i){gs.fromTo(node,{opacity:0,scale:.35,y:8,rotation:45},{opacity:1,scale:1.18,y:-38-(i%5)*12,rotation:225,duration:2.8+(i%4)*.42,delay:(i%6)*.4,repeat:-1,ease:'power1.out',repeatDelay:.9+(i%4)*.25});});
+      copperBits.forEach(function(node,i){gs.fromTo(node,{opacity:0,scale:.5,y:5},{opacity:.86,scale:1.2,y:-24-(i%4)*8,duration:2.5+(i%3)*.45,delay:(i%5)*.48,repeat:-1,ease:'sine.out',repeatDelay:1});});
+      if(gold)gs.to(gold.querySelectorAll('path'),{strokeDasharray:'18 10',strokeDashoffset:-56,duration:3.2,repeat:-1,ease:'none'});
+      if(copper)gs.to(copper.querySelectorAll('ellipse'),{scale:1.025,transformOrigin:'50% 50%',duration:1.7,repeat:-1,yoyo:true,ease:'sine.inOut',stagger:.22});
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bootAlive);else bootAlive();
+})();
+</script>
+<link rel="stylesheet" href="assets/geovalor-text-flow.css?v=3">
+<script src="assets/geovalor-text-flow.js?v=3"></script>
+<script src="assets/geovalor-frame-sequence.js?v=1"></script>
 </body></html>

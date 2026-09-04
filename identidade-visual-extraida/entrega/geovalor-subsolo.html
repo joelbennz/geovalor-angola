@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Geovalor — Leitura do subsolo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --basalto:#11201D; --carvao:#111311; --marfim:#F4F0E8; --cobre:#D1844E; --tecnico:#687570;
+    --sans:'Manrope',system-ui,sans-serif; --serif:'Playfair Display',Georgia,serif; --mono:'DM Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html{background:var(--carvao)}
+  body{margin:0;background:var(--carvao);color:var(--marfim);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  a{color:var(--cobre);text-decoration:none}
+  a:hover{color:#e5a172}
+
+  .track{position:relative;height:820svh}
+  .stage{position:sticky;top:0;height:100svh;overflow:hidden;background:var(--carvao)}
+
+  /* câmara: o frame mantém a proporção exacta da imagem, para os overlays coincidirem */
+  .frame{
+    position:absolute;left:50%;top:50%;
+    width:max(100vw, calc(100svh * 1.7768)); aspect-ratio:1672/941;
+    transform:translate(-50%,-50%);
+    will-change:transform;
+  }
+  .frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+    filter:url(#sharpen) contrast(1.05) saturate(1.04)}
+  .frame svg.overlay{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+  /* mantém cada linha técnica com espessura constante em ecrã, a qualquer zoom */
+  .overlay path,.overlay circle,.overlay ellipse,.overlay rect,.overlay line{vector-effect:non-scaling-stroke}
+
+  /* atmosfera */
+  .vignette{position:absolute;inset:0;z-index:3;pointer-events:none;
+    background:radial-gradient(118% 88% at 50% 48%,transparent 38%,rgba(9,11,10,.78) 100%),
+               linear-gradient(to bottom,rgba(9,11,10,.55) 0%,transparent 20%,transparent 62%,rgba(9,11,10,.8) 100%)}
+  .grain{position:absolute;inset:-50%;z-index:3;pointer-events:none;opacity:.055;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .bars{position:absolute;inset:0;z-index:4;pointer-events:none}
+  .bars b{position:absolute;left:0;right:0;height:0;background:var(--carvao);transition:none}
+  .bars b:first-child{top:0}.bars b:last-child{bottom:0}
+
+  /* cabeçalho */
+  .nav{position:absolute;z-index:6;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;
+    padding:26px max(24px,5vw);font:10px/1.1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:#c3c6bf}
+  .nav .brand{display:flex;align-items:center;gap:12px;font-family:var(--sans);font-weight:700;font-size:10px;letter-spacing:.16em;color:var(--marfim)}
+  .nav .brand svg{width:38px;height:38px;display:block;flex:none}
+  .nav .brand small{display:block;font:8px var(--mono);letter-spacing:.14em;color:var(--tecnico);margin-top:3px}
+  .nav .coord{color:var(--tecnico)}
+
+  /* capítulos */
+  .chapters{position:absolute;inset:0;z-index:5;pointer-events:none}
+  .chapters::before{content:"";position:absolute;inset:auto 0 0 0;height:62%;pointer-events:none;
+    background:linear-gradient(to top,rgba(9,11,10,.82) 0%,rgba(9,11,10,.45) 40%,transparent 100%)}
+  .chapter{position:absolute;left:max(24px,5vw);bottom:max(96px,calc(env(safe-area-inset-bottom) + 84px));
+    width:min(30rem,calc(100vw - 48px));opacity:0}
+  .chapter .over{display:flex;align-items:center;gap:12px;font:10px var(--mono);letter-spacing:.18em;
+    text-transform:uppercase;color:var(--cobre);margin:0 0 20px;text-shadow:0 1px 8px rgba(9,11,10,.85)}
+  .chapter .over i{display:block;width:30px;height:1px;background:var(--cobre)}
+  .chapter h2{font:600 clamp(34px,5.6vw,64px)/.94 var(--serif);letter-spacing:-.045em;margin:0 0 18px;
+    text-wrap:balance;text-shadow:0 2px 26px rgba(9,11,10,.75)}
+  .chapter h2 em{color:var(--cobre);font-weight:500}
+  .chapter p{margin:0;max-width:25rem;font-size:clamp(13px,1.05vw,14px);line-height:1.75;color:#c4c8c1;
+    text-wrap:pretty;text-shadow:0 1px 14px rgba(9,11,10,.9)}
+
+  .readout{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:26px;
+    border-top:1px solid rgba(244,240,232,.18);max-width:25rem}
+  .readout div{padding:14px 12px 0 0}
+  .readout strong{display:block;font:500 22px var(--serif);color:var(--cobre);letter-spacing:-.02em}
+  .readout span{font:9px var(--mono);letter-spacing:.11em;text-transform:uppercase;color:var(--tecnico)}
+  .cta{display:inline-flex;align-items:center;gap:18px;margin-top:30px;pointer-events:auto;
+    border:1px solid rgba(244,240,232,.5);color:var(--marfim);padding:16px 19px;
+    font:10px var(--mono);letter-spacing:.13em;text-transform:uppercase;transition:.35s}
+  .cta:hover{background:var(--marfim);color:var(--carvao);border-color:var(--marfim)}
+  .cta span{color:var(--cobre);font-size:15px}
+  .cta:hover span{color:var(--cobre)}
+
+  /* etiquetas ancoradas na imagem */
+  .pins{position:absolute;inset:0;z-index:2}
+  .pin{position:absolute;transform:translate(-50%,-50%) scale(var(--inv,1));
+    transform-origin:0 50%;white-space:nowrap;opacity:0;will-change:transform,opacity}
+  .pin b{display:flex;align-items:center;gap:9px;font:9px var(--mono);letter-spacing:.13em;
+    text-transform:uppercase;color:var(--marfim);font-weight:400}
+  .pin b::before{content:"";width:6px;height:6px;border:1px solid var(--cobre);border-radius:50%;
+    box-shadow:0 0 0 4px rgba(209,132,78,.16);flex:none}
+  .pin s{display:block;text-decoration:none;font:9px var(--mono);color:var(--tecnico);
+    letter-spacing:.08em;padding-left:15px;margin-top:3px}
+
+  /* trilho de progresso */
+  .rail{position:absolute;z-index:6;right:max(20px,5vw);top:50%;transform:translateY(-50%);
+    display:grid;gap:14px;justify-items:end;pointer-events:none}
+  .rail a{display:flex;align-items:center;gap:12px;font:9px var(--mono);letter-spacing:.12em;
+    text-transform:uppercase;color:var(--tecnico);opacity:.55;transition:.4s;
+    text-shadow:0 1px 6px rgba(9,11,10,.9)}
+  .rail a i{display:block;width:22px;height:1px;background:currentColor;transition:.4s}
+  .rail a.on{color:var(--cobre);opacity:1}
+  .rail a.on i{width:40px}
+
+  .cue{position:absolute;z-index:6;left:max(24px,5vw);bottom:max(34px,env(safe-area-inset-bottom));
+    display:flex;align-items:center;gap:14px;font:9px var(--mono);letter-spacing:.2em;
+    text-transform:uppercase;color:#9aa09a;transition:opacity .5s ease}
+  .cue b{display:block;width:1px;height:34px;background:var(--cobre)}
+  .prog{position:absolute;z-index:6;left:0;bottom:0;height:2px;background:var(--cobre);width:0}
+
+  @media (max-width:820px){
+    .rail{display:none}
+    .pin s{display:none}
+    .chapter p{max-width:none}
+    .readout{grid-template-columns:repeat(3,1fr)}
+    .readout strong{font-size:18px}
+    .nav .coord{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="track">
+  <div class="stage">
+    <div class="frame" id="frame">
+      <img src="assets/hero-cutaway.png" alt="Corte geológico do subsolo com sondagem, unidade de bombeio e zonas mineralizadas">
+
+      <svg class="overlay" viewBox="0 0 1672 941" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <filter id="sharpen" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+            <feConvolveMatrix order="3" preserveAlpha="true" divisor="1"
+              kernelMatrix="0 -0.32 0  -0.32 2.28 -0.32  0 -0.32 0"/>
+          </filter>
+          <radialGradient id="gGlow"><stop offset="0" stop-color="#D1844E" stop-opacity=".55"/><stop offset="1" stop-color="#D1844E" stop-opacity="0"/></radialGradient>
+          <radialGradient id="gCopper"><stop offset="0" stop-color="#D1844E" stop-opacity=".42"/><stop offset="1" stop-color="#D1844E" stop-opacity="0"/></radialGradient>
+          <linearGradient id="gGold" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#D1844E" stop-opacity="0"/><stop offset=".5" stop-color="#f0c78a"/><stop offset="1" stop-color="#D1844E" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+
+        <!-- topographicLines -->
+        <g id="topographicLines" opacity="0" fill="none" stroke="#F4F0E8" stroke-width="1">
+          <g opacity=".5">
+            <ellipse cx="1432" cy="236" rx="150" ry="52" transform="rotate(-13 1432 236)"/>
+            <ellipse cx="1432" cy="236" rx="118" ry="40" transform="rotate(-13 1432 236)"/>
+            <ellipse cx="1432" cy="236" rx="86" ry="29" transform="rotate(-13 1432 236)"/>
+            <ellipse cx="1432" cy="236" rx="55" ry="18" transform="rotate(-13 1432 236)"/>
+            <ellipse cx="1432" cy="236" rx="27" ry="9" transform="rotate(-13 1432 236)"/>
+          </g>
+          <g opacity=".38">
+            <ellipse cx="1090" cy="316" rx="196" ry="46" transform="rotate(-6 1090 316)"/>
+            <ellipse cx="1090" cy="316" rx="152" ry="35" transform="rotate(-6 1090 316)"/>
+            <ellipse cx="1090" cy="316" rx="108" ry="25" transform="rotate(-6 1090 316)"/>
+            <ellipse cx="1090" cy="316" rx="64" ry="15" transform="rotate(-6 1090 316)"/>
+          </g>
+          <g opacity=".3">
+            <ellipse cx="700" cy="300" rx="168" ry="34" transform="rotate(-3 700 300)"/>
+            <ellipse cx="700" cy="300" rx="124" ry="24" transform="rotate(-3 700 300)"/>
+            <ellipse cx="700" cy="300" rx="78" ry="15" transform="rotate(-3 700 300)"/>
+          </g>
+          <g opacity=".22" stroke-dasharray="3 5">
+            <path d="M120 372 H1660"/><path d="M120 404 H1660"/><path d="M120 440 H1660"/>
+          </g>
+        </g>
+
+        <!-- surveyVehicle / drillRig / pumpjack: retículas sobre os objectos reais -->
+        <g id="surveyVehicle" opacity="0" fill="none" stroke="#D1844E">
+          <circle cx="866" cy="398" r="26" stroke-opacity=".85"/>
+          <circle cx="866" cy="398" r="40" stroke-opacity=".28" stroke-dasharray="2 6"/>
+          <path d="M866 358 V346 M866 438 V450 M826 398 H814 M906 398 H918" stroke-opacity=".7"/>
+        </g>
+        <g id="drillRig" opacity="0" fill="none" stroke="#D1844E">
+          <rect x="984" y="292" width="72" height="104" stroke-opacity=".75"/>
+          <path d="M984 292 h-14 M1056 292 h14 M984 396 h-14 M1056 396 h14" stroke-opacity=".55"/>
+        </g>
+        <g id="pumpjack" opacity="0" fill="none" stroke="#D1844E">
+          <rect x="1332" y="306" width="90" height="82" stroke-opacity=".75"/>
+          <path d="M1332 306 h-14 M1422 306 h14 M1332 388 h-14 M1422 388 h14" stroke-opacity=".55"/>
+        </g>
+
+        <!-- seismicWaves -->
+        <g id="seismicWaves" opacity="0" fill="none" stroke="#cfe3e8">
+          <circle class="wv" cx="1002" cy="618" r="60" stroke-opacity=".7"/>
+          <circle class="wv" cx="1002" cy="618" r="104" stroke-opacity=".5"/>
+          <circle class="wv" cx="1002" cy="618" r="150" stroke-opacity=".32"/>
+          <circle class="wv" cx="1002" cy="618" r="196" stroke-opacity=".18"/>
+        </g>
+
+        <!-- anomalyPoints -->
+        <g id="anomalyPoints" opacity="0" stroke="#F4F0E8" fill="none">
+          <g><path d="M786 654 h18 M795 645 v18" stroke-opacity=".8"/><circle cx="795" cy="654" r="9" stroke-opacity=".45"/></g>
+          <g><path d="M1336 566 h18 M1345 557 v18" stroke-opacity=".8"/><circle cx="1345" cy="566" r="9" stroke-opacity=".45"/></g>
+          <g><path d="M702 800 h18 M711 791 v18" stroke-opacity=".8"/><circle cx="711" cy="800" r="9" stroke-opacity=".45"/></g>
+          <g><path d="M1398 828 h18 M1407 819 v18" stroke-opacity=".8"/><circle cx="1407" cy="828" r="9" stroke-opacity=".45"/></g>
+        </g>
+
+        <!-- sedimentaryLayers -->
+        <g id="sedimentaryLayers" opacity="0" fill="none" stroke="#F4F0E8" stroke-width="1.2">
+          <path d="M248 496 C520 466 900 476 1258 512 C1420 528 1546 546 1650 566" stroke-opacity=".5"/>
+          <path d="M244 552 C516 520 902 532 1262 570 C1424 588 1550 606 1654 626" stroke-opacity=".42"/>
+          <path d="M240 612 C512 578 904 592 1266 632 C1428 650 1554 668 1658 688" stroke-opacity=".36"/>
+          <path d="M236 676 C508 640 906 656 1270 698 C1432 716 1558 734 1662 754" stroke-opacity=".3"/>
+          <path d="M232 748 C504 710 908 728 1274 772 C1436 790 1562 808 1666 828" stroke-opacity=".24"/>
+        </g>
+
+        <!-- geologicalFaults -->
+        <g id="geologicalFaults" opacity="0" fill="none" stroke="#F4F0E8" stroke-width="1.4" stroke-dasharray="7 6">
+          <path d="M566 470 L470 700 L392 941" stroke-opacity=".55"/>
+          <path d="M886 436 L862 690 L836 941" stroke-opacity=".45"/>
+          <path d="M1246 500 L1284 720 L1330 941" stroke-opacity=".4"/>
+        </g>
+
+        <!-- capRock + oilReservoir -->
+        <g id="capRock" opacity="0" fill="none">
+          <path d="M584 662 C664 616 782 600 892 616 C960 626 1010 644 1046 664"
+                stroke="#cfe3e8" stroke-width="3" stroke-opacity=".65"/>
+          <path d="M584 662 C664 616 782 600 892 616 C960 626 1010 644 1046 664"
+                stroke="#cfe3e8" stroke-width="12" stroke-opacity=".1"/>
+        </g>
+        <g id="oilReservoir" opacity="0">
+          <ellipse cx="800" cy="700" rx="164" ry="34" fill="url(#gGlow)"/>
+          <path d="M636 690 C700 656 800 644 890 656 C948 664 986 682 1002 700 C960 724 860 736 772 730 C704 726 656 710 636 690 Z"
+                fill="none" stroke="#D1844E" stroke-width="1.6" stroke-opacity=".8"/>
+          <g stroke="#D1844E" stroke-opacity=".5" stroke-width="1">
+            <path d="M676 700 h256"/><path d="M700 714 h208"/><path d="M700 686 h214"/>
+          </g>
+        </g>
+
+        <!-- kimberlitePipe + diamondIndicators -->
+        <g id="kimberlitePipe" opacity="0" fill="none">
+          <path d="M1306 396 C1318 520 1338 660 1372 941" stroke="#cfe3e8" stroke-width="1.6" stroke-opacity=".7"/>
+          <path d="M1366 396 C1376 524 1396 664 1428 941" stroke="#cfe3e8" stroke-width="1.6" stroke-opacity=".7"/>
+          <path d="M1306 396 C1318 520 1338 660 1372 941 L1428 941 C1396 664 1376 524 1366 396 Z"
+                fill="#cfe3e8" fill-opacity=".07"/>
+        </g>
+        <g id="diamondIndicators" opacity="0" fill="none" stroke="#F4F0E8" stroke-width="1.2">
+          <rect x="-5" y="-5" width="10" height="10" transform="translate(1330 470) rotate(45)"/>
+          <rect x="-4" y="-4" width="8" height="8" transform="translate(1352 556) rotate(45)"/>
+          <rect x="-5.5" y="-5.5" width="11" height="11" transform="translate(1362 646) rotate(45)"/>
+          <rect x="-4" y="-4" width="8" height="8" transform="translate(1384 736) rotate(45)"/>
+          <rect x="-5" y="-5" width="10" height="10" transform="translate(1400 826) rotate(45)"/>
+        </g>
+
+        <!-- goldVeins + copperZones -->
+        <g id="goldVeins" opacity="0" fill="none" stroke="url(#gGold)" stroke-width="2.4">
+          <path d="M556 838 C620 812 664 826 712 800 C760 774 796 792 848 766"/>
+          <path d="M1150 716 C1200 694 1234 706 1276 686 C1314 668 1344 682 1382 664"/>
+          <path d="M628 906 C684 884 716 894 760 874"/>
+        </g>
+        <g id="copperZones" opacity="0">
+          <ellipse cx="1410" cy="834" rx="104" ry="56" fill="url(#gCopper)"/>
+          <ellipse cx="1284" cy="792" rx="76" ry="40" fill="url(#gCopper)"/>
+          <ellipse cx="1410" cy="834" rx="60" ry="30" fill="none" stroke="#D1844E" stroke-width="1.2" stroke-opacity=".55" stroke-dasharray="4 5"/>
+        </g>
+
+        <!-- boreholePath -->
+        <g id="boreholePath" opacity="0" fill="none">
+          <path id="boreLine" d="M1018 392 C1016 520 1010 620 1004 700"
+                stroke="#F4F0E8" stroke-width="1.8" stroke-opacity=".9"/>
+          <circle id="boreBit" cx="1018" cy="392" r="5" fill="#F4F0E8"/>
+          <circle id="boreHalo" cx="1018" cy="392" r="13" fill="none" stroke="#F4F0E8" stroke-opacity=".4"/>
+        </g>
+      </svg>
+
+      <div class="pins" id="pins">
+        <div class="pin" data-ch="1" style="left:51.8%;top:42.3%"><b>Levantamento de superfície</b><s>Gravimetria · magnetometria</s></div>
+        <div class="pin" data-ch="1" style="left:62.3%;top:31%"><b>Sonda de teste</b><s>Alvo estrutural</s></div>
+        <div class="pin" data-ch="1" style="left:82.5%;top:32.5%"><b>Unidade de bombeio</b><s>Produção activa</s></div>
+        <div class="pin" data-ch="2" style="left:20%;top:53%"><b>Sequência sedimentar</b><s>Arenito · folhelho · calcário</s></div>
+        <div class="pin" data-ch="2" style="left:52.5%;top:47%"><b>Falha normal</b><s>Deslocamento vertical</s></div>
+        <div class="pin" data-ch="2" style="left:60%;top:65.5%"><b>Aquisição sísmica</b><s>Reflexão 2D</s></div>
+        <div class="pin" data-ch="3" style="left:56%;top:64%"><b>Rocha selante</b><s>Folhelho impermeável</s></div>
+        <div class="pin" data-ch="3" style="left:60%;top:76.5%"><b>Arenito reservatório</b><s>Porosidade 18–22%</s></div>
+        <div class="pin" data-ch="4" style="left:79%;top:50%"><b>Chaminé kimberlítica</b><s>Corpo intrusivo vertical</s></div>
+        <div class="pin" data-ch="4" style="left:83.5%;top:69%"><b>Minerais indicadores</b><s>Granada · ilmenita</s></div>
+        <div class="pin" data-ch="5" style="left:42.5%;top:85%"><b>Veio aurífero</b><s>Quartzo mineralizado</s></div>
+        <div class="pin" data-ch="5" style="left:84.5%;top:88.5%"><b>Zona de cobre</b><s>Sulfuretos disseminados</s></div>
+        <div class="pin" data-ch="6" style="left:61.5%;top:44%"><b>Coluna de perfuração</b><s>Trajectória vertical</s></div>
+      </div>
+    </div>
+
+    <div class="grain"></div>
+    <div class="vignette"></div>
+    <div class="bars"><b></b><b></b></div>
+
+    <div class="nav">
+      <a class="brand" href="geovalor-identidade.html" title="Identidade Geovalor">
+        <svg viewBox="0 0 240 240" aria-hidden="true">
+          <g stroke="#D1844E" stroke-width="5" fill="none">
+            <path d="M120 2V34"/><path d="M120 206V238"/><path d="M2 120H30"/><path d="M210 120H238"/>
+          </g>
+          <path d="M120 20 206.6 70V170L120 220 33.4 170V70Z" fill="#11201D" stroke="rgba(244,240,232,.22)" stroke-width="3"/>
+          <g stroke="#D1844E" stroke-width="16" stroke-linecap="round" fill="none">
+            <path d="M62 108C82 84 158 84 178 108"/>
+            <path d="M52 146C78 112 162 112 188 146"/>
+            <path d="M46 186C76 146 164 146 194 186"/>
+          </g>
+          <path d="M92 96 120 206 148 96" stroke="#F4F0E8" stroke-width="16" fill="none"/>
+        </svg>
+        <span>GEOVALOR<small>ANGOLA, LDA.</small></span>
+      </a>
+      <span class="coord">14°40'S · 17°25'E · Angola</span>
+    </div>
+
+    <div class="chapters">
+      <article class="chapter" data-ch="0">
+        <p class="over"><i></i>Geovalor · leitura do subsolo</p>
+        <h2>O valor está <em>abaixo</em> da linha do horizonte</h2>
+        <p>Levantamento, interpretação e validação de recursos em território angolano. Role para atravessar a coluna, do relevo ao alvo de perfuração.</p>
+      </article>
+      <article class="chapter" data-ch="1">
+        <p class="over"><i></i>01 · Levantamento</p>
+        <h2>Primeiro lemos o <em>terreno</em></h2>
+        <p>Topografia, gravimetria e magnetometria definem a estrutura antes de qualquer escavação. As curvas de nível revelam a geometria que a rocha esconde.</p>
+      </article>
+      <article class="chapter" data-ch="2">
+        <p class="over"><i></i>02 · Estrutura</p>
+        <h2>A coluna <em>abre-se</em></h2>
+        <p>Sete unidades sedimentares, cortadas por falhas normais. A sísmica de reflexão devolve a profundidade e o contraste de impedância entre camadas.</p>
+      </article>
+      <article class="chapter" data-ch="3">
+        <p class="over"><i></i>03 · Sistema petrolífero</p>
+        <h2>Reservatório, não <em>lago</em></h2>
+        <p>O hidrocarboneto ocupa os poros do arenito, retido no fecho estrutural pelo folhelho selante. O que se mede é saturação e porosidade, não volume livre.</p>
+        <div class="readout">
+          <div><strong>1 840 m</strong><span>Profundidade</span></div>
+          <div><strong>21%</strong><span>Porosidade</span></div>
+          <div><strong>68%</strong><span>Saturação</span></div>
+        </div>
+      </article>
+      <article class="chapter" data-ch="4">
+        <p class="over"><i></i>04 · Kimberlito</p>
+        <h2>Uma chaminé <em>vertical</em></h2>
+        <p>O corpo intrusivo atravessa toda a sequência. Não se procuram pedras à vista: procuram-se minerais indicadores — granada, ilmenita, cromite — na fracção pesada.</p>
+      </article>
+      <article class="chapter" data-ch="5">
+        <p class="over"><i></i>05 · Mineralização</p>
+        <h2>Ouro e cobre nas <em>fracturas</em></h2>
+        <p>A mineralização segue os planos de falha e os veios de quartzo. Os teores definem-se por amostragem sistemática, não por brilho aparente.</p>
+        <div class="readout">
+          <div><strong>3,4 g/t</strong><span>Ouro</span></div>
+          <div><strong>1,8%</strong><span>Cobre</span></div>
+          <div><strong>412 m</strong><span>Extensão</span></div>
+        </div>
+      </article>
+      <article class="chapter" data-ch="6">
+        <p class="over"><i></i>06 · Perfuração</p>
+        <h2>Até ao <em>alvo</em></h2>
+        <p>A trajectória atravessa quatro unidades até ao topo do reservatório. Cada metro devolve registo litológico, desvio e pressão de formação.</p>
+      </article>
+      <article class="chapter" data-ch="7">
+        <p class="over"><i></i>07 · Relatório</p>
+        <h2>Do terreno ao <em>parecer</em></h2>
+        <p>Entregamos o volume interpretado, o modelo estrutural e o parecer de viabilidade — assinado, defensável perante investidor e regulador.</p>
+        <div class="readout">
+          <div><strong>4</strong><span>Recursos</span></div>
+          <div><strong>16</strong><span>Alvos</span></div>
+          <div><strong>1:25k</strong><span>Escala</span></div>
+        </div>
+        <a class="cta" href="#" id="ctaBtn">Solicitar levantamento <span>&#8594;</span></a>
+      </article>
+    </div>
+
+    <div class="rail" id="rail">
+      <a href="#" data-go="0">Horizonte<i></i></a>
+      <a href="#" data-go="1">Levantamento<i></i></a>
+      <a href="#" data-go="2">Estrutura<i></i></a>
+      <a href="#" data-go="3">Petrolífero<i></i></a>
+      <a href="#" data-go="4">Kimberlito<i></i></a>
+      <a href="#" data-go="5">Mineralização<i></i></a>
+      <a href="#" data-go="6">Perfuração<i></i></a>
+      <a href="#" data-go="7">Relatório<i></i></a>
+    </div>
+
+    <div class="cue" id="cue"><b></b>Role para descer</div>
+    <div class="prog" id="prog"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script>
+(function(){
+  gsap.registerPlugin(ScrollTrigger);
+  const MOBILE = matchMedia('(max-width:820px)').matches;
+  const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── smooth scrolling ───────────────────────────────────────────────── */
+  if (window.Lenis && !REDUCED) {
+    const lenis = new Lenis({ duration: MOBILE ? 0.8 : 1.1, smoothWheel: true, smoothTouch: false, touchMultiplier: 1.6 });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((t) => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+    window.__lenis = lenis;
+  }
+
+  /* ── câmara sobre a imagem ──────────────────────────────────────────── */
+  const frame = document.getElementById('frame');
+  const Z = MOBILE ? 0.68 : 1;                       // menos zoom em ecrãs pequenos
+  const cam = { s: 1.04, x: 46, y: 36 };
+  const drift = { x: 0, y: 0, r: 0 };
+  const apply = () => {
+    const bw = frame.offsetWidth, bh = frame.offsetHeight;
+    const vw = innerWidth, vh = frame.parentElement.clientHeight;
+    const sw = bw * cam.s, sh = bh * cam.s;
+    // desloca o centro do frame para enquadrar (x,y), sem nunca destapar o fundo
+    const lim = (scaled, view) => Math.max(0, (scaled - view) / 2);
+    const cl = (v, m) => Math.max(-m, Math.min(m, v));
+    const offX = cl(cam.s * (0.5 - cam.x / 100) * bw + drift.x, lim(sw, vw));
+    const offY = cl(cam.s * (0.5 - cam.y / 100) * bh + drift.y, lim(sh, vh));
+    frame.style.transform =
+      `translate3d(calc(-50% + ${offX.toFixed(1)}px), calc(-50% + ${offY.toFixed(1)}px), 0) ` +
+      `rotate(${drift.r.toFixed(3)}deg) scale(${cam.s})`;
+    frame.style.setProperty('--inv', 1 / cam.s);
+  };
+  const to = (s, x, y) => ({ s: 1 + (s - 1) * Z, x, y });
+  apply();
+
+  /* ── elementos ──────────────────────────────────────────────────────── */
+  const g = (id) => document.getElementById(id);
+  const chapters = [...document.querySelectorAll('.chapter')];
+  const pins = [...document.querySelectorAll('.pin')];
+  const railEls = [...document.querySelectorAll('#rail a')];
+  const bars = [...document.querySelectorAll('.bars b')];
+  const prog = document.getElementById('prog');
+  const cue = document.getElementById('cue');
+  const pinsFor = (n) => pins.filter((p) => +p.dataset.ch === n);
+
+  gsap.set(chapters[0], { opacity: 1 });
+
+  /* linha de perfuração: revelada por stroke-dashoffset */
+  const bore = document.getElementById('boreLine');
+  const boreLen = bore.getTotalLength();
+  gsap.set(bore, { strokeDasharray: boreLen, strokeDashoffset: boreLen });
+  const bit = document.getElementById('boreBit');
+  const halo = document.getElementById('boreHalo');
+
+  /* ── timeline mestre: duração 100 = 100% do scroll ──────────────────── */
+  const tl = gsap.timeline({
+    defaults: { ease: 'none' },
+    scrollTrigger: {
+      trigger: '.track', start: 'top top', end: 'bottom bottom',
+      scrub: REDUCED ? true : 0.55,
+      onUpdate: (self) => {
+        const p = self.progress;
+        prog.style.width = (p * 100) + '%';
+        cue.style.opacity = p > 0.02 ? 0 : 1;
+        let a = 0;
+        RANGES.forEach((r, i) => { if (p >= r[0]) a = i; });
+        if (a !== active) {
+          active = a;
+          railEls.forEach((el, i) => el.classList.toggle('on', i === a));
+        }
+      },
+    },
+  });
+  const RANGES = [[0],[0.15],[0.30],[0.45],[0.60],[0.72],[0.84],[0.94]];
+  let active = -1;
+  railEls[0].classList.add('on');
+
+  // barras cinematográficas fecham ligeiramente no subsolo
+  tl.fromTo(bars, { height: 0 }, { height: MOBILE ? 24 : 42, duration: 30 }, 0)
+    .to(bars, { height: MOBILE ? 12 : 20, duration: 20 }, 74);
+
+  /* helper: capítulo entra e sai */
+  const chapter = (n, at, out) => {
+    tl.fromTo(chapters[n], { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 4 }, at);
+    if (out != null) tl.to(chapters[n], { opacity: 0, y: -14, duration: 3.5 }, out);
+    const ps = pinsFor(n);
+    if (ps.length) {
+      tl.fromTo(ps, { opacity: 0 }, { opacity: 1, duration: 3, stagger: 1.1 }, at + 1);
+      if (out != null) tl.to(ps, { opacity: 0, duration: 2.5 }, out);
+    }
+  };
+
+  /* 00–15 · paisagem e aproximação ------------------------------------- */
+  tl.to(chapters[0], { opacity: 0, y: -14, duration: 4 }, 9);
+  tl.to(cam, { ...to(1.34, 58, 33), duration: 15, onUpdate: apply }, 0);
+
+  /* 15–30 · topografia e levantamento geofísico ------------------------ */
+  chapter(1, 15, 26);
+  tl.to(cam, { ...to(1.62, 64, 34), duration: 15, onUpdate: apply }, 15)
+    .fromTo(g('topographicLines'), { opacity: 0 }, { opacity: 1, duration: 5 }, 15)
+    .fromTo(g('surveyVehicle'), { opacity: 0 }, { opacity: 1, duration: 3 }, 17)
+    .fromTo(g('drillRig'), { opacity: 0 }, { opacity: 1, duration: 3 }, 19)
+    .fromTo(g('pumpjack'), { opacity: 0 }, { opacity: 1, duration: 3 }, 21)
+    .fromTo(g('anomalyPoints'), { opacity: 0 }, { opacity: .9, duration: 4 }, 23)
+    .to(g('topographicLines'), { opacity: .18, duration: 5 }, 30);
+
+  /* 30–45 · abertura do terreno e entrada no subsolo ------------------- */
+  chapter(2, 31, 41);
+  tl.to(cam, { ...to(1.5, 52, 58), duration: 15, onUpdate: apply }, 30)
+    .fromTo(g('sedimentaryLayers'), { opacity: 0 }, { opacity: 1, duration: 6 }, 30)
+    .fromTo(g('geologicalFaults'), { opacity: 0 }, { opacity: 1, duration: 5 }, 33)
+    .fromTo(g('seismicWaves'), { opacity: 0 }, { opacity: 1, duration: 4 }, 36)
+    .fromTo('.wv', { attr: { r: 12 }, strokeWidth: 2.4 },
+      { attr: { r: (i) => [78, 132, 190, 250][i] }, strokeWidth: .8, duration: 9, stagger: 1.2 }, 36)
+    .to(g('surveyVehicle'), { opacity: .25, duration: 4 }, 32)
+    .to(g('drillRig'), { opacity: .3, duration: 4 }, 32)
+    .to(g('pumpjack'), { opacity: .3, duration: 4 }, 32);
+
+  /* 45–60 · sistema petrolífero onshore ------------------------------- */
+  chapter(3, 46, 56);
+  tl.to(cam, { ...to(1.8, 47, 72), duration: 15, onUpdate: apply }, 45)
+    .fromTo(g('capRock'), { opacity: 0 }, { opacity: 1, duration: 5 }, 45)
+    .fromTo(g('oilReservoir'), { opacity: 0 }, { opacity: 1, duration: 6 }, 47)
+    .to(g('seismicWaves'), { opacity: .2, duration: 4 }, 46)
+    .to(g('sedimentaryLayers'), { opacity: .3, duration: 5 }, 48);
+
+  /* 60–72 · tubo de kimberlito --------------------------------------- */
+  chapter(4, 61, 69);
+  tl.to(cam, { ...to(1.76, 81, 64), duration: 12, onUpdate: apply }, 60)
+    .to(g('oilReservoir'), { opacity: .22, duration: 4 }, 61)
+    .to(g('capRock'), { opacity: .2, duration: 4 }, 61)
+    .fromTo(g('kimberlitePipe'), { opacity: 0 }, { opacity: 1, duration: 5 }, 60)
+    .fromTo(g('diamondIndicators'), { opacity: 0, scale: .6 },
+      { opacity: 1, scale: 1, duration: 5, stagger: .9, transformOrigin: '50% 50%' }, 63);
+
+  /* 72–84 · ouro e cobre --------------------------------------------- */
+  chapter(5, 73, 81);
+  tl.to(cam, { ...to(1.66, 68, 86), duration: 12, onUpdate: apply }, 72)
+    .fromTo(g('goldVeins'), { opacity: 0 }, { opacity: 1, duration: 5 }, 72)
+    .fromTo(g('copperZones'), { opacity: 0 }, { opacity: 1, duration: 5 }, 75)
+    .to(g('kimberlitePipe'), { opacity: .3, duration: 4 }, 74)
+    .to(g('diamondIndicators'), { opacity: .3, duration: 4 }, 74);
+
+  /* 84–94 · perfuração até ao alvo ----------------------------------- */
+  chapter(6, 85, 92);
+  tl.to(cam, { ...to(1.58, 60, 56), duration: 10, onUpdate: apply }, 84)
+    .fromTo(g('boreholePath'), { opacity: 0 }, { opacity: 1, duration: 2.5 }, 84)
+    .to(bore, { strokeDashoffset: 0, duration: 8 }, 84.5)
+    .to(g('oilReservoir'), { opacity: 1, duration: 4 }, 89)
+    .to(g('goldVeins'), { opacity: .35, duration: 4 }, 86)
+    .to(g('copperZones'), { opacity: .35, duration: 4 }, 86)
+    .to([bit, halo], {
+      duration: 8,
+      onUpdate: function () {
+        const pt = bore.getPointAtLength(this.progress() * boreLen);
+        bit.setAttribute('cx', pt.x); bit.setAttribute('cy', pt.y);
+        halo.setAttribute('cx', pt.x); halo.setAttribute('cy', pt.y);
+      },
+    }, 84.5)
+    .fromTo(halo, { attr: { r: 6 } }, { attr: { r: 20 }, opacity: .15, duration: 5 }, 89);
+
+  /* 94–100 · visão geral e relatório -------------------------------- */
+  chapter(7, 94.5, null);
+  tl.to(cam, { ...to(1.02, 50, 47), duration: 6, onUpdate: apply }, 94)
+    .to([g('topographicLines'), g('sedimentaryLayers'), g('geologicalFaults'),
+         g('capRock'), g('oilReservoir'), g('kimberlitePipe'), g('diamondIndicators'),
+         g('goldVeins'), g('copperZones'), g('boreholePath'), g('seismicWaves'),
+         g('anomalyPoints'), g('surveyVehicle'), g('drillRig'), g('pumpjack')],
+        { opacity: .5, duration: 6 }, 94);
+
+  // fixa a duração total em exactamente 100 → 1% de scroll = 1 unidade da sequência
+  tl.to({}, { duration: 0.01 }, 99.99);
+
+  /* ── navegação pelo trilho ─────────────────────────────────────────── */
+  const jump = (i) => {
+    const max = document.querySelector('.track').scrollHeight - innerHeight;
+    const y = (RANGES[i][0] + 0.025) * max;
+    if (window.__lenis) window.__lenis.scrollTo(y, { duration: 1.2 });
+    else scrollTo({ top: y, behavior: 'smooth' });
+  };
+  railEls.forEach((el, i) => el.addEventListener('click', (e) => { e.preventDefault(); jump(i); }));
+  document.getElementById('ctaBtn').addEventListener('click', (e) => e.preventDefault());
+
+  addEventListener('resize', () => { apply(); ScrollTrigger.refresh(); });
+
+  /* ── respiração de câmara: deriva lenta contínua, para a cena nunca congelar ─ */
+  if (!REDUCED) {
+    const amp = MOBILE ? 8 : 16;
+    gsap.to(drift, { x: amp, y: -amp * 0.5, r: 0.14, duration: 11,
+      ease: 'sine.inOut', yoyo: true, repeat: -1, onUpdate: apply });
+    gsap.to(drift, { y: amp * 0.7, duration: 7.5,
+      ease: 'sine.inOut', yoyo: true, repeat: -1 });
+
+    /* pulso sísmico contínuo, independente do scroll */
+    gsap.to('#seismicWaves', { opacity: '+=0', duration: 0 });
+    gsap.fromTo('#seismicWaves .wv',
+      { strokeOpacity: .06 },
+      { strokeOpacity: .62, duration: 1.5, stagger: .35, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+
+    /* indicadores de diamante cintilam de forma irregular */
+    gsap.utils.toArray('#diamondIndicators rect').forEach((el, i) => {
+      gsap.to(el, { strokeOpacity: .35, duration: 1.1 + i * .27, repeat: -1, yoyo: true,
+        ease: 'sine.inOut', delay: i * .4 });
+    });
+  }
+
+  /* ── entrada da marca ────────────────────────────────────────────────── */
+  const intro = gsap.timeline({ delay: .15 });
+  intro.from('.nav .brand svg', { opacity: 0, scale: .7, rotate: -18, duration: 1.1, ease: 'power3.out' })
+       .from('.nav .brand span', { opacity: 0, x: -10, duration: .8, ease: 'power2.out' }, .25)
+       .from('.nav .coord', { opacity: 0, duration: .8 }, .4)
+       .from('.chapter[data-ch="0"] .over', { opacity: 0, y: 12, duration: .9, ease: 'power2.out' }, .3)
+       .from('.chapter[data-ch="0"] h2', { opacity: 0, y: 26, duration: 1.3, ease: 'power3.out' }, .45)
+       .from('.chapter[data-ch="0"] p', { opacity: 0, y: 16, duration: 1, ease: 'power2.out' }, .7)
+       .from('.cue', { opacity: 0, duration: .8 }, .9)
+       .from('.rail a', { opacity: 0, x: 14, duration: .6, stagger: .06 }, .6);
+})();
+</script>
+</body>
+</html>

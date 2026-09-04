@@ -1,0 +1,25 @@
+# Perfis temporários de browser usados durante QA (dados de sessão/cache, não são projeto)
+.qa-*/
+
+# Cache/artefactos de ferramentas
+.openai/
+$stage/
+
+# Artefactos de build/export já presentes como pastas (evitar duplicação)
+*.zip
+*.tar.gz
+
+# Screenshots de QA soltos na raiz
+qa-*.png
+
+# Pastas de staging intermédias do deploy (release/ é a versão final)
+site-publish/
+site-publish-stage2/
+site-publish-stage3/
+
+# Ficheiros de OS
+Thumbs.db
+.DS_Store
+
+# Export standalone (bundle único, redundante com release/)
+geovalor-subsolo-standalone.html

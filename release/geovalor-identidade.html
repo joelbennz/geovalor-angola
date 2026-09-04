@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Identidade visual Geovalor — leitura do subsolo, prospecção e validação de recursos em território angolano.">
+<meta name="theme-color" content="#111311">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<title>Geovalor — Identidade visual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --basalto:#11201D; --carvao:#111311; --marfim:#F4F0E8; --cobre:#D1844E; --tecnico:#687570;
+    --sans:'Manrope',system-ui,sans-serif; --serif:'Playfair Display',Georgia,serif; --mono:'DM Mono',ui-monospace,monospace;
+    --linha:rgba(244,240,232,.14);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--carvao);color:var(--marfim);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  a{color:var(--cobre);text-decoration:none}
+  a:hover{color:#e5a172}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 max(24px,4vw)}
+
+  /* capa */
+  header.cover{min-height:78svh;display:flex;flex-direction:column;justify-content:center;
+    border-bottom:1px solid var(--linha);padding:120px 0 90px;position:relative;overflow:hidden}
+  header.cover::after{content:"";position:absolute;right:-8%;top:-30%;width:52vw;height:52vw;border-radius:50%;
+    border:1px solid rgba(209,132,78,.16);box-shadow:0 0 0 80px rgba(209,132,78,.028),0 0 0 160px rgba(209,132,78,.018);pointer-events:none}
+  .eyebrow{display:flex;align-items:center;gap:12px;font:10px var(--mono);letter-spacing:.2em;
+    text-transform:uppercase;color:var(--cobre);margin:0 0 30px}
+  .eyebrow i{display:block;width:34px;height:1px;background:var(--cobre)}
+  h1{font:600 clamp(46px,8vw,108px)/.9 var(--serif);letter-spacing:-.055em;margin:0 0 26px;max-width:14em}
+  h1 em{color:var(--cobre);font-weight:500}
+  .lede{max-width:36rem;font-size:15px;line-height:1.8;color:#b6bab2;margin:0}
+
+  /* secções */
+  section{padding:100px 0;border-bottom:1px solid var(--linha)}
+  .label{display:flex;gap:22px;font:10px var(--mono);letter-spacing:.18em;text-transform:uppercase;
+    color:var(--tecnico);border-top:1px solid var(--linha);padding-top:14px;margin:0 0 54px}
+  .label span:first-child{color:var(--cobre)}
+  h2{font:600 clamp(30px,4.4vw,56px)/1 var(--serif);letter-spacing:-.04em;margin:0 0 20px}
+  h2 em{color:var(--cobre);font-weight:500}
+  h3{font:700 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--cobre);margin:0 0 14px}
+  p{font-size:14px;line-height:1.8;color:#b6bab2;margin:0 0 18px;max-width:34rem;text-wrap:pretty}
+  .note{font:10px var(--mono);letter-spacing:.08em;color:var(--tecnico);line-height:1.7;max-width:30rem}
+
+  .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px}
+  .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px}
+  .grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+
+  .card{border:1px solid var(--linha);padding:26px}
+  .card.dark{background:var(--basalto)}
+  .card.light{background:var(--marfim);color:var(--carvao)}
+  .card.light p{color:#5c6059}
+  .card.light h3{color:#a65e35}
+
+  /* logo */
+  .logobox{display:grid;place-items:center;min-height:260px;border:1px solid var(--linha)}
+  .logobox svg{width:100%;height:auto;max-width:280px}
+  .logobox.onlight{background:var(--marfim)}
+  .logobox.oncopper{background:var(--cobre)}
+  .logobox.onphoto{background:url('assets/hero-cutaway.png') 62% 40%/220% no-repeat}
+  .cap{font:9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--tecnico);margin:12px 0 0}
+
+  .lockup{display:flex;align-items:center;gap:26px}
+  .lockup svg.mark{width:88px;height:88px;flex:none}
+  .lockup .word{font:800 clamp(28px,4vw,46px)/1 var(--sans);letter-spacing:.02em}
+  .lockup .sub{font:11px var(--mono);letter-spacing:.42em;color:var(--cobre);margin-top:10px}
+
+  .misuse{position:relative}
+  .misuse::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to bottom right,transparent calc(50% - .5px),#c0392b 50%,transparent calc(50% + .5px))}
+
+  /* cores */
+  .swatch{border:1px solid var(--linha)}
+  .swatch .chip{height:132px}
+  .swatch .meta{padding:16px}
+  .swatch b{display:block;font:600 13px var(--sans);letter-spacing:-.01em;margin-bottom:8px}
+  .swatch code{display:block;font:10px var(--mono);color:var(--tecnico);letter-spacing:.08em;line-height:1.9}
+  .ratio{display:flex;height:44px;margin-top:34px;border:1px solid var(--linha)}
+  .ratio i{display:block}
+
+  /* tipografia */
+  .specimen{border:1px solid var(--linha);padding:34px;margin-bottom:20px}
+  .specimen .k{font:9px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--tecnico);margin-bottom:18px}
+  .t-display{font:600 clamp(40px,6vw,76px)/.92 var(--serif);letter-spacing:-.05em}
+  .t-display em{color:var(--cobre);font-weight:500}
+  .t-h{font:700 26px/1.15 var(--sans);letter-spacing:-.03em}
+  .t-body{font:400 15px/1.8 var(--sans);color:#c4c8c1;max-width:38rem}
+  .t-mono{font:400 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--cobre)}
+  .scale{display:grid;gap:0;border-top:1px solid var(--linha)}
+  .scale div{display:grid;grid-template-columns:120px 1fr 140px;gap:20px;align-items:baseline;
+    padding:14px 0;border-bottom:1px solid var(--linha);font:10px var(--mono);color:var(--tecnico);letter-spacing:.1em}
+  .scale div span:nth-child(2){color:var(--marfim);font-family:var(--sans)}
+
+  /* linguagem gráfica */
+  .lang{border:1px solid var(--linha);aspect-ratio:4/3;position:relative;overflow:hidden;background:var(--basalto)}
+  .lang svg{position:absolute;inset:0;width:100%;height:100%}
+  .lang .cap{position:absolute;left:16px;bottom:14px;margin:0}
+
+  /* posts */
+  .posts{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:24px}
+  .post{position:relative;overflow:hidden;border:1px solid var(--linha);background:var(--carvao)}
+  .post.sq{aspect-ratio:1/1}
+  .post.pt{aspect-ratio:4/5}
+  .post.st{aspect-ratio:9/16}
+  .post .bg{position:absolute;inset:0;background:url('assets/hero-cutaway.png') center/cover;
+    filter:contrast(1.06) saturate(1.02)}
+  .post .scrim{position:absolute;inset:0;
+    background:linear-gradient(to top,rgba(9,11,10,.94) 0%,rgba(9,11,10,.5) 46%,rgba(9,11,10,.2) 100%)}
+  .post .body{position:absolute;inset:0;display:flex;flex-direction:column;padding:9%;gap:0}
+  .post .top{display:flex;align-items:center;gap:9px}
+  .post .top svg{width:26px;height:26px;flex:none}
+  .post .top span{font:800 9px var(--sans);letter-spacing:.18em;color:var(--marfim)}
+  .post .kick{font:9px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--cobre);margin:0 0 10px}
+  .post h4{font:600 clamp(21px,2.5vw,30px)/1.02 var(--serif);letter-spacing:-.04em;margin:0;color:var(--marfim)}
+  .post h4 em{color:var(--cobre);font-weight:500}
+  .post .mid{margin-top:auto}
+  .post .foot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:16px;
+    border-top:1px solid rgba(244,240,232,.24);padding-top:11px;
+    font:8px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#a7ada6}
+  .post .stat{font:500 34px/1 var(--serif);color:var(--cobre);letter-spacing:-.02em}
+  .post.flat .bg,.post.flat .scrim{display:none}
+  .post.flat{background:var(--basalto)}
+  .post.ivory{background:var(--marfim)}
+  .post.ivory .top span,.post.ivory h4{color:var(--carvao)}
+  .post.ivory .kick{color:#a65e35}
+  .post.ivory .foot{color:#767a72;border-color:rgba(17,19,17,.24)}
+  .post .rule{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--cobre)}
+
+  /* tokens */
+  pre{margin:0;overflow-x:auto;border:1px solid var(--linha);background:#0c0e0d;padding:26px;
+    font:12px/1.85 var(--mono);color:#c6cbc3;letter-spacing:.02em}
+  pre b{color:var(--cobre);font-weight:400}
+  pre i{color:var(--tecnico);font-style:normal}
+
+  .rules{display:grid;gap:0;border-top:1px solid var(--linha)}
+  .rules div{display:grid;grid-template-columns:26px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--linha)}
+  .rules span:first-child{font:10px var(--mono);color:var(--cobre)}
+  .rules span:last-child{font-size:13.5px;line-height:1.7;color:#b6bab2}
+  .rules em{color:var(--marfim);font-style:normal;font-weight:600}
+
+  footer{padding:70px 0 90px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;
+    font:9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--tecnico)}
+
+  @media (max-width:860px){
+    .grid2,.grid3,.grid4{grid-template-columns:1fr}
+    .scale div{grid-template-columns:88px 1fr;}
+    .scale div span:last-child{display:none}
+    .lockup{flex-direction:column;align-items:flex-start;gap:16px}
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="wrap">
+    <p class="eyebrow"><i></i>Geovalor Angola, Lda. · Manual de identidade</p>
+    <h1>Ler o subsolo com <em>rigor</em>, comunicar com <em>silêncio</em></h1>
+    <p class="lede">Este documento define a marca Geovalor: símbolo, cor, tipografia, linguagem gráfica e aplicação. É a referência única para qualquer peça — site, proposta, relatório, redes sociais, sinalética e equipamento de campo.</p>
+  </div>
+</header>
+
+<!-- ── símbolo ─────────────────────────────────────────────────────────── -->
+<section>
+  <div class="wrap">
+    <p class="label"><span>01</span><span>Símbolo e assinatura</span></p>
+    <h2>Três arcos, um <em>V</em></h2>
+    <p>O hexágono é a malha de amostragem. Os três arcos de cobre são frentes de onda sísmica a subir do subsolo. O <em>V</em> em marfim marca o ponto de leitura — valor, validação, visão técnica. A cruz de registo indica coordenada.</p>
+
+    <div class="grid3" style="margin-top:44px">
+      <div>
+        <div class="logobox">
+          <svg viewBox="0 0 240 240" aria-label="Símbolo Geovalor">
+            <g stroke="#D1844E" stroke-width="4" fill="none">
+              <path d="M120 2V34"/><path d="M120 206V238"/><path d="M2 120H30"/><path d="M210 120H238"/>
+            </g>
+            <path d="M120 20 206.6 70V170L120 220 33.4 170V70Z" fill="#11201D"/>
+            <g stroke="#D1844E" stroke-width="13" stroke-linecap="round" fill="none">
+              <path d="M62 108C82 84 158 84 178 108"/><path d="M52 146C78 112 162 112 188 146"/><path d="M46 186C76 146 164 146 194 186"/>
+            </g>
+            <path d="M92 96 120 206 148 96" stroke="#F4F0E8" stroke-width="15" fill="none"/>
+          </svg>
+        </div>
+        <p class="cap">Primário · sobre carvão</p>
+      </div>
+      <div>
+        <div class="logobox onlight">
+          <svg viewBox="0 0 240 240" aria-hidden="true">
+            <g stroke="#D1844E" stroke-width="4" fill="none">
+              <path d="M120 2V34"/><path d="M120 206V238"/><path d="M2 120H30"/><path d="M210 120H238"/>
+            </g>
+            <path d="M120 20 206.6 70V170L120 220 33.4 170V70Z" fill="#11201D"/>
+            <g stroke="#D1844E" stroke-width="13" stroke-linecap="round" fill="none">
+              <path d="M62 108C82 84 158 84 178 108"/><path d="M52 146C78 112 162 112 188 146"/><path d="M46 186C76 146 164 146 194 186"/>
+            </g>
+            <path d="M92 96 120 206 148 96" stroke="#F4F0E8" stroke-width="15" fill="none"/>
+          </svg>
+        </div>
+        <p class="cap">Sobre marfim mineral</p>
+      </div>
+      <div>
+        <div class="logobox oncopper">
+          <svg viewBox="0 0 240 240" aria-hidden="true">
+            <g stroke="#11201D" stroke-width="4" fill="none">
+              <path d="M120 2V34"/><path d="M120 206V238"/><path d="M2 120H30"/><path d="M210 120H238"/>
+            </g>
+            <path d="M120 20 206.6 70V170L120 220 33.4 170V70Z" fill="#11201D"/>
+            <g stroke="#D1844E" stroke-width="13" stroke-linecap="round" fill="none">
+              <path d="M62 108C82 84 158 84 178 108"/><path d="M52 146C78 112 162 112 188 146"/><path d="M46 186C76 146 164 146 194 186"/>
+            </g>
+            <path d="M92 96 120 206 148 96" stroke="#F4F0E8" stroke-width="15" fill="none"/>
+          </svg>
+        </div>
+        <p class="cap">Sobre cobre · uma cor</p>
+      </div>
+    </div>
+
+    <div class="card dark" style="margin-top:44px">
+      <h3>Assinatura horizontal</h3>
+      <div class="lockup" style="margin-top:22px">
+        <svg class="mark" viewBox="0 0 240 240" aria-hidden="true">
+          <g stroke="#D1844E" stroke-width="4" fill="none">
+            <path d="M120 2V34"/><path d="M120 206V238"/><path d="M2 120H30"/><path d="M210 120H238"/>
+          </g>
+          <path d="M120 20 206.6 70V170L120 220 33.4 170V70Z" fill="#0d1a17"/>
+          <g stroke="#D1844E" stroke-width="13" stroke-linecap="round" fill="none">
+            <path d="M62 108C82 84 158 84 178 108"/><path d="M52 146C78 112 162 112 188 146"/><path d="M46 186C76 146 164 146 194 186"/>
+          </g>
+          <path d="M92 96 120 206 148 96" stroke="#F4F0E8" stroke-width="15" fill="none"/>
+        </svg>
+        <div>
+          <div class="word">GEOVALOR</div>
+          <div class="sub">ANGOLA, LDA.</div>
+        </div>
+      </div>
+      <p class="note" style="margin-top:26px">Espaço de respiro mínimo: metade da largura do hexágono em todos os lados. Tamanho mínimo do símbolo isolado: 22 px em ecrã, 9 mm em impressão. Abaixo disso, usar o hexágono sem os arcos interiores.</p>
+    </div>
+
+    <div class="grid4" style="margin-top:26px">
+      <div><div class="logobox misuse" style="min-height:150px"><svg viewBox="0 0 240 240" style="max-width:100px;transform:rotate(14deg)" aria-hidden="true"><path d="M120 20 206.6 70V170L120 220 33.4 170V70Z" fill="#11201D"/><g stroke="#D1844E" stroke-width="13" stroke-linecap="round" fill="none"><path d="M62 108C82 84 158 84 178 108"/><path d="M52 146C78 112 162 112 188 146"/><path d="M46 186C76 146 164 146 194 186"/></g><path d="M92 96 120 206 148 96" stroke="#F4F0E8" stroke-width="15" fill="none"/></svg></div><p class="cap">Não rodar</p></div>
+      <div><div class="logobox misuse" style="min-height:150px"><svg viewBox="0 0 240 240" style="max-width:100px;transform:scaleX(1.5)" aria-hidden="true"><path d="M120 20 206.6 70V170L120 220 33.4 170V70Z" fill="#11201D"/><g stroke="#D1844E" stroke-width="13" stroke-linecap="round" fill="none"><path d="M62 108C82 84 158 84 178 108"/><path d="M52 146C78 112 162 112 188 146"/><path d="M46 186C76 146 164 146 194 186"/></g><path d="M92 96 120 206 148 96" stroke="#F4F0E8" stroke-width="15" fill="none"/></svg></div><p class="cap">Não distorcer</p></div>
+      <div><div class="logobox misuse" style="min-height:150px"><svg viewBox="0 0 240 240" style="max-width:100px" aria-hidden="true"><path d="M120 20 206.6 70V170L120 220 33.4 170V70Z" fill="#11201D"/><g stroke="#3f9ad1" stroke-width="13" stroke-linecap="round" fill="none"><path d="M62 108C82 84 158 84 178 108"/><path d="M52 146C78 112 162 112 188 146"/><path d="M46 186C76 146 164 146 194 186"/></g><path d="M92 96 120 206 148 96" stroke="#F4F0E8" stroke-width="15" fill="none"/></svg></div><p class="cap">Não recolorir</p></div>
+      <div><div class="logobox misuse onphoto" style="min-height:150px"><svg viewBox="0 0 240 240" style="max-width:100px" aria-hidden="true"><path d="M120 20 206.6 70V170L120 220 33.4 170V70Z" fill="none"/><g stroke="#D1844E" stroke-width="13" stroke-linecap="round" fill="none"><path d="M62 108C82 84 158 84 178 108"/><path d="M52 146C78 112 162 112 188 146"/><path d="M46 186C76 146 164 146 194 186"/></g><path d="M92 96 120 206 148 96" stroke="#F4F0E8" stroke-width="15" fill="none"/></svg></div><p class="cap">Não usar sem fundo do hexágono sobre foto</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── cor ─────────────────────────────────────────────────────────────── -->
+<section>
+  <div class="wrap">
+    <p class="label"><span>02</span><span>Cor</span></p>
+    <h2>Cinco cores, uma <em>hierarquia</em></h2>
+    <p>O carvão é o fundo por defeito — a marca vive no escuro. O cobre é o único acento: sublinha o dado, nunca preenche áreas grandes. O marfim é a voz. O verde basalto separa planos. O cinza técnico é para metadados.</p>
+
+    <div class="grid3" style="margin-top:44px">
+      <div class="swatch"><div class="chip" style="background:#11201D"></div><div class="meta">
+        <b>Verde basalto</b><code>#11201D</code><code>rgb(17 32 29)</code><code>Planos, cartões, superfícies</code></div></div>
+      <div class="swatch"><div class="chip" style="background:#111311"></div><div class="meta">
+        <b>Carvão</b><code>#111311</code><code>rgb(17 19 17)</code><code>Fundo primário</code></div></div>
+      <div class="swatch"><div class="chip" style="background:#F4F0E8"></div><div class="meta">
+        <b>Marfim mineral</b><code>#F4F0E8</code><code>rgb(244 240 232)</code><code>Texto, fundo claro</code></div></div>
+      <div class="swatch"><div class="chip" style="background:#D1844E"></div><div class="meta">
+        <b>Cobre</b><code>#D1844E</code><code>rgb(209 132 78)</code><code>Acento único, dados, CTA</code></div></div>
+      <div class="swatch"><div class="chip" style="background:#687570"></div><div class="meta">
+        <b>Cinza técnico</b><code>#687570</code><code>rgb(104 117 112)</code><code>Metadados, legendas, linhas</code></div></div>
+      <div class="swatch"><div class="chip" style="background:linear-gradient(135deg,#111311,#11201D 55%,#1a2f2a)"></div><div class="meta">
+        <b>Profundidade</b><code>carvão → basalto</code><code>135°</code><code>Só para fundos de secção</code></div></div>
+    </div>
+
+    <p class="note" style="margin-top:34px">Proporção de referência numa peça: 70% carvão, 16% basalto, 8% marfim, 4% cinza técnico, 2% cobre.</p>
+    <div class="ratio">
+      <i style="background:#111311;flex:70"></i><i style="background:#11201D;flex:16"></i>
+      <i style="background:#F4F0E8;flex:8"></i><i style="background:#687570;flex:4"></i><i style="background:#D1844E;flex:2"></i>
+    </div>
+  </div>
+</section>
+
+<!-- ── tipografia ──────────────────────────────────────────────────────── -->
+<section>
+  <div class="wrap">
+    <p class="label"><span>03</span><span>Tipografia</span></p>
+    <h2>Serif para a <em>afirmação</em>, mono para o <em>dado</em></h2>
+    <p>Playfair Display carrega os títulos — autoridade, não decoração. Manrope escreve tudo o que se lê em parágrafo. DM Mono etiqueta números, coordenadas, unidades e secções: é o registo de campo.</p>
+
+    <div class="specimen" style="margin-top:44px">
+      <p class="k">Playfair Display · Display · 600 / itálico 500</p>
+      <div class="t-display">O valor está <em>abaixo</em><br>da linha do horizonte</div>
+    </div>
+    <div class="grid2">
+      <div class="specimen">
+        <p class="k">Manrope · Interface e corpo · 400–800</p>
+        <div class="t-h">Levantamento geofísico integrado</div>
+        <p class="t-body" style="margin-top:14px">A interpretação é entregue com o modelo estrutural, o volume calculado e o parecer de viabilidade. Cada afirmação técnica tem origem rastreável no dado de campo.</p>
+      </div>
+      <div class="specimen">
+        <p class="k">DM Mono · Etiquetas e dados · 400–500</p>
+        <div class="t-mono">14°40'S · 17°25'E · Angola</div>
+        <div class="t-mono" style="margin-top:12px">Prof. 1 840 m &nbsp;·&nbsp; Poros. 21%</div>
+        <div class="t-mono" style="margin-top:12px">03 — Sistema petrolífero</div>
+        <p class="note" style="margin-top:20px">Sempre em caixa alta, letter-spacing entre .12em e .20em. Nunca em parágrafo corrido.</p>
+      </div>
+    </div>
+
+    <div class="scale" style="margin-top:34px">
+      <div><span>Display</span><span style="font:600 30px/1 var(--serif);letter-spacing:-.04em">Playfair 600</span><span>clamp(34–108px) / -.05em</span></div>
+      <div><span>Título</span><span style="font:600 22px/1 var(--serif);letter-spacing:-.03em">Playfair 600</span><span>clamp(30–56px) / -.04em</span></div>
+      <div><span>Subtítulo</span><span style="font:700 18px/1 var(--sans);letter-spacing:-.02em">Manrope 700</span><span>26px / -.03em</span></div>
+      <div><span>Corpo</span><span style="font:400 15px/1 var(--sans)">Manrope 400</span><span>14–15px / 1.8</span></div>
+      <div><span>Etiqueta</span><span style="font:400 11px var(--mono);letter-spacing:.16em">DM MONO 400</span><span>9–11px / .16em / caixa alta</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── linguagem gráfica ───────────────────────────────────────────────── -->
+<section>
+  <div class="wrap">
+    <p class="label"><span>04</span><span>Linguagem gráfica</span></p>
+    <h2>A sobreposição <em>técnica</em></h2>
+    <p>A marca desenha por cima do real: linha fina, tracejado, retícula, curva de nível, cruz de registo. Nunca ilustração, nunca ícone arredondado. Tudo o que se desenha tem de parecer medido.</p>
+
+    <div class="grid3" style="margin-top:44px">
+      <div class="lang">
+        <svg viewBox="0 0 200 150" fill="none" stroke="#F4F0E8">
+          <g opacity=".55">
+            <ellipse cx="100" cy="72" rx="76" ry="26"/><ellipse cx="100" cy="72" rx="58" ry="19"/>
+            <ellipse cx="100" cy="72" rx="40" ry="13"/><ellipse cx="100" cy="72" rx="22" ry="7"/>
+          </g>
+        </svg>
+        <p class="cap">Curva de nível</p>
+      </div>
+      <div class="lang">
+        <svg viewBox="0 0 200 150" fill="none">
+          <g stroke="#F4F0E8" opacity=".5">
+            <path d="M12 46C56 34 132 40 188 54"/><path d="M12 68C56 55 132 62 188 76"/>
+            <path d="M12 92C56 78 132 86 188 100"/><path d="M12 118C56 103 132 112 188 126"/>
+          </g>
+          <path d="M70 26 58 132" stroke="#F4F0E8" stroke-dasharray="5 4" opacity=".6"/>
+          <path d="M140 26 152 132" stroke="#F4F0E8" stroke-dasharray="5 4" opacity=".6"/>
+          <ellipse cx="100" cy="80" rx="34" ry="8" fill="#D1844E" fill-opacity=".22" stroke="#D1844E" stroke-opacity=".7"/>
+        </svg>
+        <p class="cap">Estrato e falha</p>
+      </div>
+      <div class="lang">
+        <svg viewBox="0 0 200 150" fill="none" stroke="#D1844E">
+          <circle cx="100" cy="72" r="8" stroke-opacity=".9"/>
+          <circle cx="100" cy="72" r="22" stroke-opacity=".5" stroke-dasharray="3 5"/>
+          <circle cx="100" cy="72" r="38" stroke-opacity=".25" stroke-dasharray="3 5"/>
+          <path d="M100 22V6M100 138v16M42 72H26M174 72h-16" stroke-opacity=".8"/>
+          <rect x="-6" y="-6" width="12" height="12" transform="translate(100 72) rotate(45)" stroke="#F4F0E8" stroke-opacity=".9"/>
+        </svg>
+        <p class="cap">Cruz de registo · anomalia</p>
+      </div>
+    </div>
+
+    <div class="rules" style="margin-top:44px">
+      <div><span>01</span><span><em>Linha</em> — 1 px em ecrã, 0,25 pt em impressão. Tracejado 7/6 para falhas e limites inferidos, contínuo para dados medidos.</span></div>
+      <div><span>02</span><span><em>Retícula</em> — grelha de 12 colunas, goteira de 26 px. As secções separam-se por uma linha a 14% de opacidade, nunca por caixa.</span></div>
+      <div><span>03</span><span><em>Cantos</em> — sempre a 90°. Raio zero em cartões, botões e imagens. A única forma curva permitida é o arco de onda e o círculo de registo.</span></div>
+      <div><span>04</span><span><em>Fotografia</em> — terreno real ao crepúsculo, luz de contorno, contraste alto, saturação baixa. Nunca céu azul aberto, nunca pessoas a posar.</span></div>
+      <div><span>05</span><span><em>Números</em> — sempre com unidade, sempre em Playfair para o valor e DM Mono para a etiqueta. Espaço fino como separador de milhares: 1 840 m.</span></div>
+      <div><span>06</span><span><em>Movimento</em> — a câmara aproxima-se e desce; nunca gira sobre si. Duração 0,8–1,4 s, curva <code style="font-family:var(--mono);color:var(--cobre)">power3.out</code>. Revelação por opacidade e traço, nunca por salto.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── redes sociais ───────────────────────────────────────────────────── -->
+<section>
+  <div class="wrap">
+    <p class="label"><span>05</span><span>Redes sociais · modelos</span></p>
+    <h2>Quatro moldes, sempre os <em>mesmos</em></h2>
+    <p>Cada peça usa um destes quatro moldes. A imagem ocupa tudo, o texto vive no terço inferior sobre gradiente, a barra de cobre fecha a base. Nunca mais de uma ideia por post.</p>
+
+    <div class="posts" style="margin-top:44px">
+      <div class="post sq">
+        <div class="bg"></div><div class="scrim"></div>
+        <div class="body">
+          <div class="top">
+            <svg viewBox="0 0 240 240" aria-hidden="true"><path d="M120 20 206.6 70V170L120 220 33.4 170V70Z" fill="#11201D"/><g stroke="#D1844E" stroke-width="16" stroke-linecap="round" fill="none"><path d="M62 108C82 84 158 84 178 108"/><path d="M52 146C78 112 162 112 188 146"/><path d="M46 186C76 146 164 146 194 186"/></g><path d="M92 96 120 206 148 96" stroke="#F4F0E8" stroke-width="17" fill="none"/></svg>
+            <span>GEOVALOR</span>
+          </div>
+          <div class="mid">
+            <p class="kick">Sistema petrolífero</p>
+            <h4>O petróleo não está num <em>lago</em></h4>
+            <div class="foot"><span>Leitura do subsolo · 01</span><span>geovalor.ao</span></div>
+          </div>
+        </div>
+        <div class="rule"></div>
+      </div>
+
+      <div class="post pt">
+        <div class="bg" style="background-position:78% 62%"></div><div class="scrim"></div>
+        <div class="body">
+          <div class="top">
+            <svg viewBox="0 0 240 240" aria-hidden="true"><path d="M120 20 206.6 70V170L120 220 33.4 170V70Z" fill="#11201D"/><g stroke="#D1844E" stroke-width="16" stroke-linecap="round" fill="none"><path d="M62 108C82 84 158 84 178 108"/><path d="M52 146C78 112 162 112 188 146"/><path d="M46 186C76 146 164 146 194 186"/></g><path d="M92 96 120 206 148 96" stroke="#F4F0E8" stroke-width="17" fill="none"/></svg>
+            <span>GEOVALOR</span>
+          </div>
+          <div class="mid">
+            <p class="kick">Kimberlito</p>
+            <h4>Procuram-se <em>indicadores</em>, não pedras</h4>
+            <div class="foot"><span>Granada · ilmenita · cromite</span><span>4/5</span></div>
+          </div>
+        </div>
+        <div class="rule"></div>
+      </div>
+
+      <div class="post sq flat">
+        <div class="body">
+          <div class="top">
+            <svg viewBox="0 0 240 240" aria-hidden="true"><path d="M120 20 206.6 70V170L120 220 33.4 170V70Z" fill="#0d1a17"/><g stroke="#D1844E" stroke-width="16" stroke-linecap="round" fill="none"><path d="M62 108C82 84 158 84 178 108"/><path d="M52 146C78 112 162 112 188 146"/><path d="M46 186C76 146 164 146 194 186"/></g><path d="M92 96 120 206 148 96" stroke="#F4F0E8" stroke-width="17" fill="none"/></svg>
+            <span>GEOVALOR</span>
+          </div>
+          <div class="mid">
+            <p class="kick">Dado do mês</p>
+            <div class="stat">1 840 m</div>
+            <h4 style="margin-top:12px;font-size:20px">Profundidade média do alvo nos nossos levantamentos onshore</h4>
+            <div class="foot"><span>Bacia do Kwanza</span><span>Q3 2026</span></div>
+          </div>
+        </div>
+        <div class="rule"></div>
+      </div>
+
+      <div class="post st ivory">
+        <div class="body">
+          <div class="top">
+            <svg viewBox="0 0 240 240" aria-hidden="true"><path d="M120 20 206.6 70V170L120 220 33.4 170V70Z" fill="#11201D"/><g stroke="#D1844E" stroke-width="16" stroke-linecap="round" fill="none"><path d="M62 108C82 84 158 84 178 108"/><path d="M52 146C78 112 162 112 188 146"/><path d="M46 186C76 146 164 146 194 186"/></g><path d="M92 96 120 206 148 96" stroke="#F4F0E8" stroke-width="17" fill="none"/></svg>
+            <span>GEOVALOR</span>
+          </div>
+          <div class="mid">
+            <p class="kick">Story · convite</p>
+            <h4>Precisa de um <em>parecer</em> defensável?</h4>
+            <div class="foot"><span>Arraste para cima</span><span>geovalor.ao</span></div>
+          </div>
+        </div>
+        <div class="rule"></div>
+      </div>
+    </div>
+
+    <p class="note" style="margin-top:34px">Formatos de exportação: 1080×1080 (feed), 1080×1350 (retrato), 1080×1920 (story). Margem interior 9% em todos. Título máximo 7 palavras. A legenda não repete o título.</p>
+  </div>
+</section>
+
+<!-- ── tokens ──────────────────────────────────────────────────────────── -->
+<section>
+  <div class="wrap">
+    <p class="label"><span>06</span><span>Tokens para código</span></p>
+    <h2>Copiar e <em>usar</em></h2>
+    <p>Base para qualquer implementação. Sem raios de canto, sem sombras difusas, sem gradientes decorativos.</p>
+    <pre style="margin-top:34px"><i>/* Geovalor — tokens */</i>
+:root{
+  <b>--geo-carvao</b>:      #111311;  <i>/* fundo primário */</i>
+  <b>--geo-basalto</b>:     #11201D;  <i>/* planos, cartões */</i>
+  <b>--geo-marfim</b>:      #F4F0E8;  <i>/* texto, fundo claro */</i>
+  <b>--geo-cobre</b>:       #D1844E;  <i>/* acento único */</i>
+  <b>--geo-tecnico</b>:     #687570;  <i>/* metadados */</i>
+  <b>--geo-linha</b>:       rgba(244,240,232,.14);
+
+  <b>--geo-serif</b>:  'Playfair Display', Georgia, serif;
+  <b>--geo-sans</b>:   'Manrope', system-ui, sans-serif;
+  <b>--geo-mono</b>:   'DM Mono', ui-monospace, monospace;
+
+  <b>--geo-display</b>: 600 clamp(34px,7vw,108px)/.9 var(--geo-serif);
+  <b>--geo-titulo</b>:  600 clamp(30px,4.4vw,56px)/1 var(--geo-serif);
+  <b>--geo-corpo</b>:   400 15px/1.8 var(--geo-sans);
+  <b>--geo-etiqueta</b>:400 10px var(--geo-mono);
+
+  <b>--geo-raio</b>:    0;
+  <b>--geo-goteira</b>: 26px;
+  <b>--geo-secao</b>:   100px;
+  <b>--geo-margem</b>:  max(24px,4vw);
+  <b>--geo-curva</b>:   cubic-bezier(.16,1,.3,1);
+  <b>--geo-dur</b>:     1.1s;
+}
+<i>/* etiqueta padrão */</i>
+.geo-label{ font:var(--geo-etiqueta); letter-spacing:.18em;
+  text-transform:uppercase; color:var(--geo-cobre); }
+<i>/* imagem: sempre tratada */</i>
+.geo-foto{ filter:contrast(1.06) saturate(1.02); }</pre>
+  </div>
+</section>
+
+<!-- ── voz ─────────────────────────────────────────────────────────────── -->
+<section>
+  <div class="wrap">
+    <p class="label"><span>07</span><span>Voz</span></p>
+    <h2>Afirmar, não <em>vender</em></h2>
+    <div class="grid2" style="margin-top:44px">
+      <div class="card dark">
+        <h3>Escrevemos assim</h3>
+        <p>Frase curta, verbo directo, número com unidade. Explicamos o método antes do resultado. Quando não sabemos, dizemos que não sabemos e indicamos o que falta medir.</p>
+        <p class="note">«O hidrocarboneto ocupa os poros do arenito, retido pelo folhelho selante. Medimos saturação e porosidade — não volume livre.»</p>
+      </div>
+      <div class="card dark">
+        <h3>Não escrevemos assim</h3>
+        <p>Superlativos, promessas de retorno, linguagem de oportunidade. Sem exclamações, sem emoji, sem «revolucionário», «único», «incrível». O rigor é o argumento de venda.</p>
+        <p class="note">Evitar: «A maior descoberta de sempre em Angola!» · «Oportunidade imperdível» · «Riqueza escondida à sua espera».</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <span>Geovalor Angola, Lda. · Manual de identidade · v1</span>
+  <span><a href="index.html">Ver a experiência do subsolo →</a></span>
+</footer>
+
+</body>
+</html>

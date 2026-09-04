@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" role="img" aria-label="Geovalor Angola — fotografia de perfil">
+  <rect width="1080" height="1080" fill="#11201D"/>
+  <g transform="translate(190 190) scale(3.5)">
+    <path d="M100 3 184 51v98l-84 48-84-48V51z" fill="#11201D" stroke="#F4F0E8" stroke-width="2" opacity=".18"/>
+    <path d="M44 70c30-24 76-25 111-4M33 96c36-23 92-23 136 3M35 123c39-18 90-16 130 6" fill="none" stroke="#D1844E" stroke-width="7" stroke-linecap="round"/>
+    <path d="m64 83 36 72 38-72" fill="none" stroke="#F4F0E8" stroke-width="8" stroke-linejoin="miter"/>
+    <path d="M100 3v25M100 172v25M16 100H0M200 100h-16" stroke="#D1844E" stroke-width="3"/>
+  </g>
+</svg>

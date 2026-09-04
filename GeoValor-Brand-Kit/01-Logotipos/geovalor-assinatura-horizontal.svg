@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 240" role="img" aria-labelledby="title desc">
+  <title id="title">Geovalor — Opção 03, Estratos</title>
+  <desc id="desc">Símbolo hexagonal com estratos geológicos formando as letras G e V.</desc>
+  <g transform="translate(25 20)">
+    <path d="M100 3 184 51v98l-84 48-84-48V51z" fill="#11201D"/>
+    <path d="M44 70c30-24 76-25 111-4M33 96c36-23 92-23 136 3M35 123c39-18 90-16 130 6" fill="none" stroke="#D1844E" stroke-width="7" stroke-linecap="round"/>
+    <path d="m64 83 36 72 38-72" fill="none" stroke="#F4F0E8" stroke-width="8" stroke-linejoin="miter"/>
+    <path d="M100 3v25M100 172v25M16 100H0M200 100h-16" stroke="#D1844E" stroke-width="3"/>
+  </g>
+  <g transform="translate(250 57)">
+    <text x="0" y="66" fill="#11201D" font-family="Arial, Helvetica, sans-serif" font-size="74" font-weight="800" letter-spacing="4">GEOVALOR</text>
+    <text x="4" y="112" fill="#D1844E" font-family="monospace" font-size="16" font-weight="700" letter-spacing="9">ANGOLA, LDA.</text>
+  </g>
+</svg>

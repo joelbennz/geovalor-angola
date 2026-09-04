@@ -1,0 +1,120 @@
+.gv-story-layer{position:absolute;inset:0;width:100%;height:100%;z-index:5;pointer-events:none;overflow:visible;shape-rendering:geometricPrecision}
+.gv-story-layer .gv-phase{opacity:0;will-change:opacity,transform;transform-box:fill-box;transform-origin:center}
+.gv-story-layer .gv-line{fill:none;stroke:#d1844e;stroke-width:1.35;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 3px rgba(209,132,78,.35))}
+.gv-story-layer .gv-line.soft{stroke:#96a5a0;stroke-dasharray:7 6;opacity:.78}
+.gv-story-layer .gv-dot{fill:#d1844e;filter:drop-shadow(0 0 5px rgba(209,132,78,.85))}
+.gv-story-layer .gv-title{fill:#f4f0e8;font:500 13px 'DM Mono',monospace;letter-spacing:2.2px;paint-order:stroke;stroke:#090b0a;stroke-width:4px;stroke-linejoin:round}
+.gv-story-layer .gv-copy{fill:#b8c0bc;font:400 10px 'DM Mono',monospace;letter-spacing:.8px;paint-order:stroke;stroke:#090b0a;stroke-width:3px;stroke-linejoin:round}
+.gv-story-layer .gv-panel-bg{fill:rgba(9,11,10,.86);stroke:rgba(209,132,78,.58);stroke-width:1;vector-effect:non-scaling-stroke}
+.gv-story-layer .gv-panel-grid{stroke:rgba(244,240,232,.11);stroke-width:.7;vector-effect:non-scaling-stroke}
+.gv-story-layer .gv-panel-label{fill:#f4f0e8;font:500 10px 'DM Mono',monospace;letter-spacing:1.4px}
+.gv-story-layer .gv-panel-unit{fill:#687570;font:400 8px 'DM Mono',monospace;letter-spacing:1px}
+.gv-story-layer .gv-wave-hot{fill:none;stroke:#d1844e;stroke-width:2;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 5px rgba(209,132,78,.65))}
+.gv-story-layer .gv-wave-cold{fill:none;stroke:#68b9d0;stroke-width:1.5;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 4px rgba(104,185,208,.55))}
+.gv-story-layer .gv-wave-gold{fill:none;stroke:#e2b45c;stroke-width:1.7;vector-effect:non-scaling-stroke}
+.gv-story-layer .gv-pulse{fill:none;stroke:#d1844e;stroke-width:1.4;vector-effect:non-scaling-stroke;transform-box:fill-box;transform-origin:center}
+.gv-story-layer .gv-gold{fill:#e5b75f;filter:drop-shadow(0 0 5px rgba(229,183,95,.9))}
+.gv-story-layer .gv-diamond{fill:#eef9fb;stroke:#8fd5e3;stroke-width:.8;filter:drop-shadow(0 0 6px rgba(184,235,246,.95));transform-box:fill-box;transform-origin:center}
+.gv-story-layer .gv-copper{fill:#72b8a0;filter:drop-shadow(0 0 5px rgba(83,178,145,.75))}
+.gv-story-layer .gv-aquifer{fill:none;stroke:#54b5d0;stroke-width:2;stroke-dasharray:9 7;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 5px rgba(84,181,208,.55))}
+.gv-story-layer .gv-bore{fill:none;stroke:#f4f0e8;stroke-width:1.7;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 5px rgba(244,240,232,.7))}
+.gv-story-layer .gv-target{fill:none;stroke:#d1844e;stroke-width:1.25;vector-effect:non-scaling-stroke}
+.gv-story-layer .gv-overview{fill:rgba(9,11,10,.8);stroke:rgba(244,240,232,.2);stroke-width:1}
+.gv-story-layer .gv-overview-title{fill:#d1844e;font:500 11px 'DM Mono',monospace;letter-spacing:2px}
+.gv-story-layer .gv-overview-copy{fill:#dfe1dc;font:400 9px 'DM Mono',monospace;letter-spacing:.7px}
+.gv-story-scan{position:absolute;z-index:4;left:0;top:22%;width:100%;height:1px;opacity:0;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(209,132,78,.72),rgba(244,240,232,.85),rgba(209,132,78,.72),transparent);box-shadow:0 0 13px rgba(209,132,78,.45);transform:translateX(-100%)}
+.gv-story-layer .gv-mobile-tag{display:none}
+@media(max-width:820px){.gv-story-layer .gv-title{font-size:16px;letter-spacing:1.3px}.gv-story-layer .gv-copy{font-size:12px}.gv-story-layer .gv-panel{display:none}.gv-story-layer .gv-overview{display:none}.gv-story-layer .gv-overview-title,.gv-story-layer .gv-overview-copy{display:none}.gv-story-layer .gv-callout{filter:drop-shadow(0 3px 12px rgba(0,0,0,.9))}}
+@media(prefers-reduced-motion:reduce){.gv-story-scan{display:none}}
+
+/* Plano geral técnico: encerra a narrativa sem converter as legendas em imagem. */
+.gv-technical-finale{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  overflow:hidden;
+  pointer-events:none;
+  visibility:hidden;
+  opacity:0;
+  background:#090b0a;
+  will-change:opacity;
+}
+.gv-technical-finale::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:
+    radial-gradient(115% 92% at 50% 48%,transparent 48%,rgba(4,6,5,.54) 100%),
+    linear-gradient(180deg,rgba(4,6,5,.32),transparent 18%,transparent 78%,rgba(4,6,5,.5));
+}
+.gv-finale-frame{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:max(100vw,calc(100svh * 1.7768));
+  aspect-ratio:1672/941;
+  transform:translate3d(-50%,-50%,0) scale(1.035);
+  transform-origin:50% 50%;
+  will-change:transform;
+}
+.gv-finale-frame>img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  filter:contrast(1.055) saturate(1.07) brightness(1.015);
+}
+.gv-finale-frame>.gv-story-layer{z-index:2}
+.gv-finale-frame .gv-phase{opacity:0}
+.gv-finale-mobile-summary{display:none}
+
+@media(max-width:820px){
+  .gv-technical-finale{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .gv-finale-frame{
+    width:calc(100vw - 32px);
+    top:45%;
+    box-shadow:0 0 0 1px rgba(209,132,78,.22),0 22px 70px rgba(0,0,0,.72);
+  }
+  .gv-finale-frame>.gv-story-layer{display:none}
+  .gv-finale-mobile-summary{
+    position:absolute;
+    z-index:4;
+    left:max(20px,env(safe-area-inset-left));
+    right:max(20px,env(safe-area-inset-right));
+    top:61%;
+    bottom:auto;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+    font:500 9px/1.25 'DM Mono',monospace;
+    letter-spacing:.11em;
+    text-transform:uppercase;
+    color:#dfe1dc;
+  }
+  .gv-finale-mobile-summary span{
+    min-width:0;
+    padding:9px 10px;
+    border:1px solid rgba(209,132,78,.35);
+    background:rgba(9,11,10,.78);
+    backdrop-filter:blur(8px);
+  }
+  .gv-finale-mobile-summary strong{
+    grid-column:1/-1;
+    padding:0 0 5px;
+    color:#f4f0e8;
+    font-weight:500;
+    letter-spacing:.16em;
+  }
+  .gv-finale-mobile-summary b{color:#d1844e;font-weight:500}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .gv-technical-finale,.gv-finale-frame{will-change:auto}
+}

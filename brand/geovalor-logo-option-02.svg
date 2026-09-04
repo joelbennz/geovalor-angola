@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 240" role="img" aria-labelledby="title desc">
+  <title id="title">Geovalor — Opção 02, Sinal Profundo</title>
+  <desc id="desc">Marca geométrica inspirada em ondas sísmicas e camadas do subsolo.</desc>
+  <g transform="translate(30 30)">
+    <path d="M90 4A86 86 0 1 0 176 90" fill="none" stroke="#C96F3B" stroke-width="9" stroke-linecap="square"/>
+    <path d="M45 89h29l13-38 25 78 15-40h49" fill="none" stroke="#132521" stroke-width="9" stroke-linejoin="miter"/>
+    <path d="M55 137c18 18 52 24 78 8" fill="none" stroke="#C96F3B" stroke-width="5" opacity=".7"/>
+    <circle cx="176" cy="90" r="7" fill="#C96F3B"/>
+  </g>
+  <g transform="translate(250 60)">
+    <text x="0" y="65" fill="#132521" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="700" letter-spacing="7">GEOVALOR</text>
+    <path d="M3 91h618" stroke="#C96F3B" stroke-width="2"/>
+    <text x="3" y="121" fill="#60706B" font-family="monospace" font-size="15" letter-spacing="6">GEOPHYSICS · ENERGY · ANGOLA</text>
+  </g>
+</svg>

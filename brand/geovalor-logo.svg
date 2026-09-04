@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 220" role="img" aria-labelledby="title desc">
+  <title id="title">Geovalor Angola</title><desc id="desc">Logotipo Geovalor com símbolo geológico em cobre e wordmark em branco.</desc>
+  <rect width="920" height="220" fill="#111311"/>
+  <g transform="translate(34 30)">
+    <path d="M80 0C35 0 0 35 0 80s35 80 80 80c24 0 45-10 60-27" fill="none" stroke="#C98252" stroke-width="2"/>
+    <path d="M80 18C45 18 18 45 18 80s27 62 62 62c20 0 38-9 49-23" fill="none" stroke="#C98252" stroke-width="2" opacity=".72"/>
+    <path d="M80 36C56 36 36 56 36 80s20 44 44 44c16 0 29-8 38-19" fill="none" stroke="#C98252" stroke-width="2" opacity=".48"/>
+    <path d="M49 51l31 62 31-62" fill="none" stroke="#E7E6DF" stroke-width="5" stroke-linecap="square"/>
+    <path d="M65 82h30" stroke="#C98252" stroke-width="4"/>
+  </g>
+  <g fill="#E7E6DF">
+    <text x="224" y="117" font-family="Arial, sans-serif" font-size="62" font-weight="700" letter-spacing="10">GEOVALOR</text>
+    <text x="228" y="156" fill="#C98252" font-family="monospace" font-size="14" letter-spacing="7">ANGOLA, LDA.</text>
+  </g>
+</svg>

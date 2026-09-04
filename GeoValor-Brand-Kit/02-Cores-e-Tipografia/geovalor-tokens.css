@@ -1,0 +1,114 @@
+/* ==========================================================================
+   Geovalor Angola, Lda. — tokens de identidade
+   Base única para site, apresentações, posts e documentos.
+   Regras não negociáveis: raio de canto zero, sem sombras difusas,
+   sem gradientes decorativos, cobre só como acento.
+   ========================================================================== */
+
+:root{
+  /* ── cor ──────────────────────────────────────────────────────────────── */
+  --geo-carvao:   #111311;   /* fundo primário — a marca vive no escuro */
+  --geo-basalto:  #11201D;   /* planos, cartões, superfícies elevadas */
+  --geo-marfim:   #F4F0E8;   /* texto sobre escuro, fundo claro */
+  --geo-cobre:    #D1844E;   /* acento único: dados, CTA, etiquetas */
+  --geo-tecnico:  #687570;   /* metadados, legendas, linhas secundárias */
+
+  --geo-linha:        rgba(244,240,232,.14);
+  --geo-linha-clara:  rgba(17,19,17,.20);
+  --geo-scrim:        linear-gradient(to top,
+                        rgba(9,11,10,.94) 0%,
+                        rgba(9,11,10,.50) 46%,
+                        rgba(9,11,10,.20) 100%);
+
+  /* proporção de referência numa peça:
+     70% carvão · 16% basalto · 8% marfim · 4% cinza técnico · 2% cobre */
+
+  /* ── tipografia ───────────────────────────────────────────────────────── */
+  --geo-serif: 'Playfair Display', Georgia, serif;   /* títulos */
+  --geo-sans:  'Manrope', system-ui, sans-serif;     /* interface e corpo */
+  --geo-mono:  'DM Mono', ui-monospace, monospace;   /* dados e etiquetas */
+
+  --geo-display:  600 clamp(34px,7vw,108px)/.90 var(--geo-serif);
+  --geo-titulo:   600 clamp(30px,4.4vw,56px)/1.00 var(--geo-serif);
+  --geo-subtitulo:700 26px/1.15 var(--geo-sans);
+  --geo-corpo:    400 15px/1.80 var(--geo-sans);
+  --geo-etiqueta: 400 10px var(--geo-mono);
+
+  --geo-track-display: -.05em;
+  --geo-track-titulo:  -.04em;
+  --geo-track-etiqueta: .18em;
+
+  /* ── espaço e forma ──────────────────────────────────────────────────── */
+  --geo-raio:     0;          /* sempre 90° */
+  --geo-goteira:  26px;
+  --geo-secao:    100px;
+  --geo-margem:   max(24px,4vw);
+  --geo-colunas:  12;
+  --geo-traco:    1px;        /* linha em ecrã; 0,25pt em impressão */
+  --geo-tracejado: 7 6;       /* falhas e limites inferidos */
+
+  /* ── movimento ───────────────────────────────────────────────────────── */
+  --geo-curva: cubic-bezier(.16,1,.3,1);   /* power3.out */
+  --geo-dur:   1.1s;
+  --geo-dur-curta: .8s;
+  --geo-dur-longa: 1.4s;
+  /* a câmara aproxima-se e desce; nunca gira sobre si.
+     revelação por opacidade e traço, nunca por salto. */
+}
+
+/* ── primitivas ─────────────────────────────────────────────────────────── */
+
+.geo-label{
+  font: var(--geo-etiqueta);
+  letter-spacing: var(--geo-track-etiqueta);
+  text-transform: uppercase;
+  color: var(--geo-cobre);
+}
+
+.geo-meta{
+  font: var(--geo-etiqueta);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--geo-tecnico);
+}
+
+.geo-h1{ font: var(--geo-display); letter-spacing: var(--geo-track-display); margin: 0; }
+.geo-h2{ font: var(--geo-titulo);  letter-spacing: var(--geo-track-titulo);  margin: 0; }
+.geo-h1 em, .geo-h2 em{ color: var(--geo-cobre); font-weight: 500; }
+
+.geo-corpo{ font: var(--geo-corpo); color: #b6bab2; max-width: 34rem; text-wrap: pretty; }
+
+.geo-dado{ font: 500 34px/1 var(--geo-serif); color: var(--geo-cobre); letter-spacing: -.02em; }
+/* números sempre com unidade; espaço fino como separador de milhares: 1 840 m */
+
+.geo-cartao{
+  background: var(--geo-basalto);
+  border: var(--geo-traco) solid var(--geo-linha);
+  border-radius: var(--geo-raio);
+  padding: 26px;
+}
+
+.geo-botao{
+  display: inline-flex; align-items: center; gap: 18px;
+  border: var(--geo-traco) solid rgba(244,240,232,.5);
+  color: var(--geo-marfim); background: none;
+  padding: 16px 19px; border-radius: var(--geo-raio);
+  font: var(--geo-etiqueta); letter-spacing: .13em; text-transform: uppercase;
+  transition: .35s var(--geo-curva); cursor: pointer;
+}
+.geo-botao:hover{ background: var(--geo-marfim); color: var(--geo-carvao); border-color: var(--geo-marfim); }
+
+.geo-foto{ filter: contrast(1.06) saturate(1.02); }
+
+.geo-secao-linha{
+  border-top: var(--geo-traco) solid var(--geo-linha);
+  padding-top: 14px;
+  display: flex; gap: 22px;
+}
+
+/* grelha de 12 colunas */
+.geo-grelha{
+  display: grid;
+  grid-template-columns: repeat(var(--geo-colunas), minmax(0,1fr));
+  gap: var(--geo-goteira);
+}

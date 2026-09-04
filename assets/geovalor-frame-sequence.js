@@ -1,4 +1,7 @@
-/* Geovalor cinematic frame sequence: 30 pixel-aligned states from one master. */
+/* Geovalor cinematic frame sequence: 30 pixel-aligned states from one master.
+   Serves 1080p on typical/small viewports and 4K only where the extra
+   resolution is actually visible (large viewport x DPR), so the page does
+   not force everyone to download 68MB of 4K frames regardless of screen. */
 (function () {
   'use strict';
   var FRAME_COUNT = 30;
@@ -30,8 +33,15 @@
   style.textContent = '#gv-sequence{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;background:#050708}#gv-sequence .gv-sequence-frame{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;opacity:0;transition:opacity .16s linear;will-change:opacity}#gv-sequence .gv-sequence-frame.is-a{opacity:1}#frame>img{opacity:.16!important}#frame svg.overlay{position:relative;z-index:2}@media(prefers-reduced-motion:reduce){#gv-sequence .gv-sequence-frame{transition:none}}';
   document.head.appendChild(style);
 
+  // Effective pixels needed to fill the frame at native resolution. Below
+  // ~2200 effective px, 1080p already covers it 1:1 or better; only large
+  // and/or high-DPI viewports get real benefit from the 4K set.
+  var effectivePx = (window.innerWidth || 1280) * (window.devicePixelRatio || 1);
+  var folder = effectivePx > 2200 ? 'frames-4k' : 'frames-1080';
+  var version = folder === 'frames-4k' ? 'v=2' : 'v=1';
+
   var urls = [];
-  for (var i = 0; i < FRAME_COUNT; i++) urls.push('assets/frames-4k/frame-' + String(i + 1).padStart(2, '0') + '.jpg?v=2');
+  for (var i = 0; i < FRAME_COUNT; i++) urls.push('assets/' + folder + '/frame-' + String(i + 1).padStart(2, '0') + '.jpg?' + version);
   var loaded = Object.create(null);
   function load(index) {
     if (index < 0 || index >= FRAME_COUNT || loaded[index]) return;
@@ -48,10 +58,13 @@
     a.style.opacity = String(1 - mix);
     b.style.opacity = String(mix);
   }
-  for (var first = 0; first < 5; first++) load(first);
-  var n = 5;
-  function warm() { if (n < FRAME_COUNT) { load(n++); setTimeout(warm, 180); } }
-  setTimeout(warm, 600);
+  // Only the first frame is needed immediately (it's what's on screen at
+  // load); the rest trickle in afterwards so initial paint isn't blocked
+  // by a burst of large image requests.
+  load(0); load(1);
+  var n = 2;
+  function warm() { if (n < FRAME_COUNT) { load(n++); setTimeout(warm, 220); } }
+  setTimeout(warm, 900);
 
   var raf = 0;
   function update() {

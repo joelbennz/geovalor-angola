@@ -151,6 +151,15 @@
     .scale div span:last-child{display:none}
     .lockup{flex-direction:column;align-items:flex-start;gap:16px}
   }
+  .mission{background:linear-gradient(135deg,#11201d 0%,#0b1211 68%,#101716 100%);color:#f4f0e8;border:1px solid rgba(244,240,232,.14);position:relative;overflow:hidden}
+  .mission:after{content:"";position:absolute;width:420px;height:420px;right:-150px;top:-190px;border:1px solid rgba(209,132,78,.18);border-radius:50%;box-shadow:0 0 0 28px rgba(209,132,78,.035),0 0 0 58px rgba(209,132,78,.025);pointer-events:none}
+  .mission .mission-grid{display:grid;grid-template-columns:minmax(220px,.72fr) minmax(0,1.5fr);gap:clamp(28px,6vw,96px);align-items:start}
+  .mission h2{color:#f4f0e8;margin:0;max-width:420px}
+  .mission h2 em{color:#d1844e;font-style:normal}
+  .mission p{color:#dfe2dc;max-width:760px}
+  .mission .mission-lead{font-size:clamp(18px,2.2vw,27px);line-height:1.35;color:#f4f0e8;max-width:720px}
+  .mission .mission-close{margin-top:28px;color:#d1844e;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+  @media (max-width:860px){.mission .mission-grid{grid-template-columns:1fr;gap:24px}.mission:after{right:-220px}}
 </style>
 </head>
 <body>
@@ -162,6 +171,27 @@
     <p class="lede">Este documento define a marca Geovalor: símbolo, cor, tipografia, linguagem gráfica e aplicação. É a referência única para qualquer peça — site, proposta, relatório, redes sociais, sinalética e equipamento de campo.</p>
   </div>
 </header>
+
+<section id="missao">
+  <div class="wrap">
+    <p class="label"><span>00</span><span>Missão da GeoValor</span></p>
+    <div class="card mission">
+      <div class="mission-grid">
+        <div>
+          <p class="eyebrow"><i></i>Da concessão à produção</p>
+          <h2>Conhecer o depósito.<br><em>Viabilizar o futuro.</em></h2>
+        </div>
+        <div>
+          <p class="mission-lead">A missão da GeoValor é ajudar as empresas, cooperativas e titulares de direitos mineiros a conduzirem as suas concessões até à fase de produção, proporcionando-lhes um conhecimento técnico concreto da área, das formações geológicas e dos depósitos existentes.</p>
+          <p>Por meio de estudos geológicos, levantamentos geofísicos, sondagens, amostragem, análises laboratoriais e trabalhos experimentais, a GeoValor procura determinar a localização, extensão, profundidade, espessura e potencial económico de cada depósito.</p>
+          <p>Com base nesse conhecimento, colaboramos com o titular mineiro na definição das formas técnica, operacional e financeiramente mais viáveis de exploração, considerando as características do depósito, a capacidade do investidor e as condições específicas da concessão.</p>
+          <p>Mais do que realizar estudos, a GeoValor pretende acompanhar cada projeto ao longo do caminho:</p>
+          <p class="mission-close">da concessão ao conhecimento, do conhecimento ao depósito e do depósito à produção.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ── símbolo ─────────────────────────────────────────────────────────── -->
 <section>

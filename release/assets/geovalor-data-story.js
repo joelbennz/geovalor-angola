@@ -150,8 +150,8 @@
     finaleImage.loading='lazy';
     finaleImage.fetchPriority='low';
     finaleImage.sizes='100vw';
-    finaleImage.srcset='assets/geovalor-subsolo-clean-v3-1920.jpg 1920w, assets/geovalor-subsolo-clean-v3-4k.jpg 3840w, assets/geovalor-subsolo-clean-v3-8k.jpg 7680w';
-    finaleImage.src='assets/geovalor-subsolo-clean-v3-4k.jpg';
+    finaleImage.srcset='assets/geovalor-subsolo-clean-v3-1920.jpg?v=2 1920w, assets/geovalor-subsolo-clean-v3-4k.jpg?v=2 3840w, assets/geovalor-subsolo-clean-v3-8k.jpg?v=2 7680w';
+    finaleImage.src='assets/geovalor-subsolo-clean-v3-4k.jpg?v=2';
     finaleImage.onerror=function(){
       finaleImage.onerror=null;
       finaleImage.removeAttribute('srcset');

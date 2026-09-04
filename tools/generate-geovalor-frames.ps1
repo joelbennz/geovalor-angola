@@ -1,6 +1,8 @@
 param(
   [string]$Source = "release/assets/geovalor-subsolo-clean-v3-8k.jpg",
-  [string]$Output = "release/assets/frames"
+  [string]$Output = "release/assets/frames",
+  [int]$OutputWidth = 1920,
+  [int]$OutputHeight = 1080
 )
 
 Add-Type -AssemblyName System.Drawing
@@ -12,8 +14,8 @@ New-Item -ItemType Directory -Path $outputPath -Force | Out-Null
 Get-ChildItem -LiteralPath $outputPath -Filter "frame-*.jpg" -ErrorAction SilentlyContinue | Remove-Item -Force
 
 $src = [Drawing.Bitmap]::FromFile($sourcePath)
-$outW = 1920
-$outH = 1080
+$outW = $OutputWidth
+$outH = $OutputHeight
 $srcAspect = $src.Width / [double]$src.Height
 $outAspect = $outW / [double]$outH
 

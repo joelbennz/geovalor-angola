@@ -31,7 +31,7 @@
   document.head.appendChild(style);
 
   var urls = [];
-  for (var i = 0; i < FRAME_COUNT; i++) urls.push('assets/frames/frame-' + String(i + 1).padStart(2, '0') + '.jpg?v=1');
+  for (var i = 0; i < FRAME_COUNT; i++) urls.push('assets/frames-4k/frame-' + String(i + 1).padStart(2, '0') + '.jpg?v=2');
   var loaded = Object.create(null);
   function load(index) {
     if (index < 0 || index >= FRAME_COUNT || loaded[index]) return;

@@ -12,6 +12,15 @@
 
   var overlay = frame.querySelector('svg.overlay');
   var base = frame.querySelector('img');
+  var surface = document.createElement('img');
+  surface.className = 'gv-surface-photo';
+  surface.src = 'assets/surface-real-1920.jpg?v=1';
+  surface.srcset = 'assets/surface-real-1920.jpg?v=1 1920w, assets/surface-real-4k.jpg?v=1 3840w';
+  surface.sizes = '100vw';
+  surface.alt = 'Fotografia real de referência de uma operação de sondagem; não representa uma concessão específica em Angola.';
+  surface.decoding = 'async';
+  surface.fetchPriority = 'high';
+  base.after ? base.after(surface) : frame.insertBefore(surface, base.nextSibling); // depois de 'base' na ordem do DOM, para não ser apanhada por frame.querySelector('img') no bootAlive()
   var wrap = document.createElement('div');
   wrap.id = 'gv-sequence';
   wrap.setAttribute('aria-hidden', 'true');
@@ -30,7 +39,7 @@
   else frame.appendChild(wrap);
 
   var style = document.createElement('style');
-  style.textContent = '#gv-sequence{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;background:#050708}#gv-sequence .gv-sequence-frame{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;opacity:0;transition:opacity .16s linear;will-change:opacity}#gv-sequence .gv-sequence-frame.is-a{opacity:1}#frame>img{opacity:.16!important}#frame svg.overlay{position:relative;z-index:2}@media(prefers-reduced-motion:reduce){#gv-sequence .gv-sequence-frame{transition:none}}';
+  style.textContent = '#gv-sequence{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;background:#050708;opacity:0;transition:opacity .35s ease}#gv-sequence .gv-sequence-frame{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;opacity:0;transition:opacity .16s linear;will-change:opacity}#gv-sequence .gv-sequence-frame.is-a{opacity:1}.gv-surface-photo{position:absolute;inset:0;z-index:2;width:100%;height:100%;display:block;object-fit:cover;opacity:1;transition:opacity .35s ease;filter:contrast(1.04) saturate(.92) brightness(.78)}#frame>img:not(.gv-surface-photo){opacity:.16!important}#frame svg.overlay{position:relative;z-index:3}@media(prefers-reduced-motion:reduce){#gv-sequence,.gv-surface-photo,#gv-sequence .gv-sequence-frame{transition:none}}';
   document.head.appendChild(style);
 
   // Effective pixels needed to fill the frame at native resolution. Below
@@ -72,6 +81,9 @@
     var p = Math.max(0, Math.min(1, scrollY / max));
     var position = p * (FRAME_COUNT - 1);
     show(Math.floor(position), position % 1);
+    var sequenceReveal = Math.max(0, Math.min(1, (p - .06) / .18));
+    wrap.style.opacity = String(sequenceReveal);
+    surface.style.opacity = String(1 - Math.max(0, Math.min(1, (p - .03) / .20)));
     raf = 0;
   }
   addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });

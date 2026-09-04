@@ -64,13 +64,13 @@
       ['property', 'og:title', 'Geovalor — Leitura do subsolo'],
       ['property', 'og:description', 'Do terreno ao parecer: interpretação geológica, alvos minerais e perfuração orientada por dados.'],
       ['property', 'og:url', siteOrigin],
-      ['property', 'og:image', siteOrigin + '/assets/og.png'],
+      ['property', 'og:image', siteOrigin + '/assets/og.png?v=2'],
       ['property', 'og:image:width', '1672'],
       ['property', 'og:image:height', '941'],
       ['name', 'twitter:card', 'summary_large_image'],
       ['name', 'twitter:title', 'Geovalor — Leitura do subsolo'],
       ['name', 'twitter:description', 'Interpretação geológica e prospecção de recursos em território angolano.'],
-      ['name', 'twitter:image', siteOrigin + '/assets/og.png']
+      ['name', 'twitter:image', siteOrigin + '/assets/og.png?v=2']
     ];
     metadata.forEach(function (item) {
       var selector = 'meta[' + item[0] + '="' + item[1] + '"]';

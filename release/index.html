@@ -656,14 +656,14 @@
           <div><strong>16</strong><span>Alvos</span></div>
           <div><strong>1:25k</strong><span>Escala</span></div>
         </div>
-        <a class="cta" href="#" id="ctaBtn">Solicitar levantamento <span>→</span></a>
+        <a class="cta" href="https://wa.me/244972974784?text=Olá%20GeoValor,%20gostaria%20de%20solicitar%20um%20levantamento." id="ctaBtn" target="_blank" rel="noopener">Solicitar levantamento <span>→</span></a>
       </article>
     </div>
 
     <div class="rail" id="rail">
       <a href="#" data-go="0">Horizonte<i></i></a>
       <a href="#" data-go="1">Levantamento<i></i></a>
-      <a href="#" data-go="2">Estrutura<i></i></a>
+      <a href="#" data-go="2" class="structure-link">Estrutura<i></i></a>
       <a href="#" data-go="3">Petrolífero<i></i></a>
       <a href="#" data-go="4">Kimberlito<i></i></a>
       <a href="#" data-go="5">Mineralização<i></i></a>
@@ -689,7 +689,16 @@
     </div>
   </div>
 </section>
+<section class="contact-strip" aria-label="Contactos GeoValor">
+  <div><span class="contact-kicker">Fale com a GeoValor</span><h2>Da concessão ao <em>conhecimento.</em></h2></div>
+  <div class="contact-links"><a href="https://geovalor-angola.com/">geovalor-angola.com</a><a href="https://www.instagram.com/geovalor_/" target="_blank" rel="noopener">Instagram · @geovalor_</a><a href="https://www.linkedin.com/company/144824232/admin/dashboard/" target="_blank" rel="noopener">LinkedIn · GeoValor Angola</a><a href="https://wa.me/244972974784" target="_blank" rel="noopener">WhatsApp · +244 972 974 784</a></div>
+</section>
 <style>
+  .contact-strip{display:grid;grid-template-columns:1.1fr .9fr;gap:7vw;align-items:end;background:var(--carvao);color:var(--marfim);padding:96px 10.5vw;border-top:1px solid rgba(244,240,232,.16)}
+  .contact-kicker{display:block;font:10px var(--mono);letter-spacing:.17em;text-transform:uppercase;color:var(--cobre);margin-bottom:22px}
+  .contact-strip h2{font:600 clamp(42px,5.5vw,78px)/.96 var(--serif);letter-spacing:-.04em;margin:0}.contact-strip h2 em{color:var(--cobre);font-style:italic;font-weight:500}
+  .contact-links{display:grid;gap:14px;border-left:1px solid rgba(244,240,232,.18);padding-left:28px}.contact-links a{font:11px var(--mono);letter-spacing:.08em;color:var(--marfim);text-decoration:none}.contact-links a:hover{color:var(--cobre)}
+  @media(max-width:820px){.stage{height:100svh;height:100dvh}.frame{will-change:auto}.contact-strip{display:block;padding:80px 8vw}.contact-links{margin-top:42px;padding-left:0;border-left:0;border-top:1px solid rgba(244,240,232,.18);padding-top:22px}}
   .mission-section{position:relative;background:linear-gradient(135deg,var(--basalto) 0%,var(--carvao) 68%,#101716 100%);color:var(--marfim);padding:130px 10.5vw;overflow:hidden}
   .mission-section:after{content:"";position:absolute;width:420px;height:420px;right:-150px;top:-190px;border:1px solid rgba(244,240,232,.14);border-radius:50%;box-shadow:0 0 0 28px rgba(209,132,78,.035),0 0 0 58px rgba(209,132,78,.025);pointer-events:none}
   .mission-inner{position:relative;max-width:1200px}
@@ -743,7 +752,7 @@
     const offY = cl(cam.s * (0.5 - cam.y / 100) * bh + drift.y, lim(sh, vh));
     frame.style.transform =
       `translate3d(calc(-50% + ${offX.toFixed(1)}px), calc(-50% + ${offY.toFixed(1)}px), 0) ` +
-      `rotate(${drift.r.toFixed(3)}deg) scale(${cam.s})`;
+      `rotate(${MOBILE ? 0 : drift.r.toFixed(3)}deg) scale(${cam.s})`;
     frame.style.setProperty('--inv', 1 / cam.s);
   };
   const to = (s, x, y) => ({ s: 1 + (s - 1) * Z, x, y });
@@ -787,6 +796,8 @@
       },
     },
   });
+  tl.to(frame.querySelector('img'), { opacity: 0, duration: 2.5 }, 31);
+  tl.to(frame.querySelector('img'), { opacity: 1, duration: 2.5 }, 41);
   const RANGES = [[0],[0.15],[0.30],[0.45],[0.60],[0.72],[0.84],[0.94]];
   let active = -1;
   railEls[0].classList.add('on');
@@ -900,7 +911,7 @@
   addEventListener('resize', () => { apply(); ScrollTrigger.refresh(); });
 
   /* ── respiração de câmara: deriva lenta contínua, para a cena nunca congelar ─ */
-  if (!REDUCED) {
+  if (!REDUCED && !MOBILE) {
     const amp = MOBILE ? 8 : 16;
     gsap.to(drift, { x: amp, y: -amp * 0.5, r: 0.14, duration: 11,
       ease: 'sine.inOut', yoyo: true, repeat: -1, onUpdate: apply });

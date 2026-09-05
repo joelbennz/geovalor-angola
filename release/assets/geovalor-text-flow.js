@@ -55,7 +55,7 @@
       document.head.appendChild(stylesheet);
     }
 
-    var siteOrigin = 'https://geovalor.joel-ricardo2012.chatgpt.site';
+    var siteOrigin = 'https://geovalor-angola.com';
     var metadata = [
       ['name', 'description', 'Experiência cinematográfica de leitura geológica, prospecção e validação de recursos em território angolano.'],
       ['name', 'theme-color', '#111311'],
@@ -117,7 +117,7 @@
     }
 
     if (cta) {
-      cta.href = 'mailto:geral@geovalor.co.ao?subject=Solicitação%20de%20levantamento%20Geovalor';
+      cta.href = 'https://wa.me/244972974784?text=Olá%20GeoValor,%20gostaria%20de%20solicitar%20um%20levantamento.';
       cta.setAttribute('aria-label', 'Solicitar levantamento por email');
     }
 

@@ -1,12 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://geovalor.joel-ricardo2012.chatgpt.site/</loc>
+    <loc>https://geovalor-angola.com/</loc>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://geovalor-angola.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://geovalor-angola.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://geovalor-angola.com/ru/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://geovalor-angola.com/pl/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://geovalor-angola.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://geovalor-angola.com/"/>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://geovalor.joel-ricardo2012.chatgpt.site/geovalor-identidade.html</loc>
+    <loc>https://geovalor-angola.com/en/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://geovalor-angola.com/ru/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://geovalor-angola.com/pl/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://geovalor-angola.com/es/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://geovalor-angola.com/geovalor-identidade.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
